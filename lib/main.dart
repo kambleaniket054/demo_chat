@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:demo_chat/globalfunction.dart';
 import 'package:flutter/material.dart';
 
 import 'Homepage.dart';
@@ -36,9 +39,6 @@ class MyApp extends StatelessWidget {
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key, required this.title}) : super(key: key);
-
-
-
   final String title;
 
   @override
@@ -46,61 +46,94 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+List<String> names = ["home","library","search","person"];
+int index=0;
+final GlobalKey<NavigatorState> _mainnavigationkey = GlobalKey<NavigatorState>();
+GlobalKey<NavigatorState> navigationkey = GlobalKey<NavigatorState>();
+ StreamController<bool> changeindexstate = StreamController<bool>.broadcast();
 
+ @override
+  void initState() {
+   super.initState();
+   navigationkeys = navigationkey;
+
+    // TODO: implement initState
+  }
 
   @override
   Widget build(BuildContext context) {
+    mainnavigationkey = _mainnavigationkey;
+    return MaterialApp(
+      navigatorKey: _mainnavigationkey,
+      home: Scaffold(
+        primary: true,
+        body: Navigator(
+          key: navigationkey,
+         onGenerateRoute: (RouteSettings setting){
+           var page;
+           switch(setting.name){
+             case "home": page =  homepage();
+             break;
+             case "library": page= librarypage();
+             break;
+             case "search":page= searchpage();
+             break;
+             case "person": page=detailpage();
+             break;
+             default :
+               page =  homepage();
 
-    return Scaffold(
+           }
+           return MaterialPageRoute(builder:(BuildContext context) =>page,settings: setting);
+         },
+         /* child: Center(
 
-      body: Navigator(
-       onGenerateRoute: (RouteSettings setting){
-         var page;
-         switch(setting.name){
-           case "home": page =  homepage();
-           break;
-           case "library": page= librarypage();
-           break;
-           case "search":page= searchpage();
-           break;
-           case "person": page=detailpage();
-           break;
+            child: Column(
 
-         }
-         return MaterialPageRoute(builder:(BuildContext context) =>page,settings: setting);
-       },
-       /* child: Center(
-
-          child: Column(
-
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              const Text(
-                'You have pushed the button this many times:',
-              ),
-              Text(
-                '',
-                style: Theme.of(context).textTheme.headline4,
-              ),
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                const Text(
+                  'You have pushed the button this many times:',
+                ),
+                Text(
+                  '',
+                  style: Theme.of(context).textTheme.headline4,
+                ),
+              ],
+            ),
+          ),*/
+        ),
+        bottomNavigationBar: StreamBuilder<bool>(
+          stream: changeindexstate.stream,
+          builder: (context, snapshot) {
+            return BottomNavigationBar(
+              type: BottomNavigationBarType.fixed,
+              currentIndex: index,
+              items: const [
+              BottomNavigationBarItem(icon: Icon(Icons.home_outlined,color: Colors.black54,),
+                  activeIcon: Icon(Icons.home_filled,color: Colors.black54,),
+                  label: ""),
+              BottomNavigationBarItem(icon: Icon(Icons.my_library_add_outlined,color: Colors.black54,),
+                  activeIcon: Icon(Icons.my_library_add,color: Colors.black54,),label: ""),
+              BottomNavigationBarItem(icon: Icon(Icons.search_outlined,color: Colors.black54,),
+                  activeIcon: Icon(Icons.search_rounded,color: Colors.black54,),label: ""),
+              BottomNavigationBarItem(icon: Icon(Icons.person_outline_rounded,color: Colors.black54,),
+                  activeIcon: Icon(Icons.person,color: Colors.black54,),label: ""),
             ],
-          ),
-        ),*/
+              onTap: (index){
+                this.index = index;
+                changeindexstate.add(true);
+                navigationkey.currentState?.pushReplacementNamed(names[index]);
+              },
+            );
+          }
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: (){},
+          tooltip: 'Increment',
+          child: const Icon(Icons.add),
+        ), // This trailing comma makes auto-formatting nicer for build methods.
       ),
-      bottomNavigationBar: BottomNavigationBar(items: [
-        BottomNavigationBarItem(icon: Icon(Icons.home_rounded),label: "Home"),
-        BottomNavigationBarItem(icon: Icon(Icons.my_library_add_rounded),label: "Library"),
-        BottomNavigationBarItem(icon: Icon(Icons.search),label: "Search"),
-        BottomNavigationBarItem(icon: Icon(Icons.person),label: "Person"),
-      ],
-        onTap: (index){
-
-        },
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: (){},
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
