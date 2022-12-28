@@ -8,6 +8,9 @@ class arfilterscreen extends StatefulWidget{
 }
 class arfilterscreenstate extends State<arfilterscreen>{
   late Demofacecontroller demofacecontroller;
+  String data = "";
+  String textureBytes = "";
+  var texture ;
   @override
   Widget build(BuildContext context) {
    return Scaffold(
@@ -35,13 +38,11 @@ class arfilterscreenstate extends State<arfilterscreen>{
                ondemo_facecontroller: (controller)async{
                  demofacecontroller = controller;
                  demofacecontroller.init();
-                 var texture ;
                   try {
-                    const String textureBytes = "assets/fox_face_mesh_texture.png";
+                      textureBytes = "assets/fox_face_mesh_texture.png";
                      texture = await rootBundle.load(textureBytes);
-                    String data;
                     // if(count == 1){
-                    data ="yellow_sunglasses.sfb";
+                    data ="Mask.sfb";
                     demofacecontroller.loadmesh(texture,data);
                      // textureBytes = await rootBundle.load('assets/fox_face_mesh_texture.png');
                   }  catch (e) {
@@ -55,13 +56,24 @@ class arfilterscreenstate extends State<arfilterscreen>{
          Row(
            children: [
              GestureDetector(
-               onTap: ()async{
-                 var texture ;
-                 const String textureBytes = "assets/fox_face_mesh_texture.png";
-                 texture = await rootBundle.load(textureBytes);
-                 String data;
-                 // if(count == 1){
-                 data ="fox_face.sfb";
+               onTap: () async {
+                /* var texture ;
+                   if ( textureBytes != "assets/fox_face_mesh_texture.png") {
+                     textureBytes = "assets/fox_face_mesh_texture.png";
+                   }
+                   else{
+                     textureBytes =  "assets/venom.jpg";
+                   }*/
+
+                 // texture = await rootBundle.load(textureBytes);
+
+                 if(data != "fox_face.sfb"){
+                   data = "fox_face.sfb";
+                 }
+                 else{
+                   data = "yellow_sunglasses.sfb";
+                 }
+
                  demofacecontroller.loadmesh(texture,data);
                },
                child: Container(

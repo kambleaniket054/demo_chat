@@ -7,13 +7,22 @@ class searchpage extends StatefulWidget{
   createState()=>searchpagestate();
 }
 class searchpagestate extends State<searchpage>{
+  GlobalKey key = GlobalKey();
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    Future.delayed(Duration(seconds: 3),(){
+      print(key.currentContext?.size?.width);
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         systemOverlayStyle:const SystemUiOverlayStyle(
-          systemNavigationBarColor: Colors.black,
-          systemNavigationBarIconBrightness: Brightness.light,
+          systemNavigationBarColor: Colors.white,
+          systemNavigationBarIconBrightness: Brightness.dark,
         ),
         backgroundColor: Colors.white,
         elevation: 0.5,
@@ -23,6 +32,7 @@ class searchpagestate extends State<searchpage>{
             Navigator.push(navigationkeys.currentContext!, MaterialPageRoute(builder: (context)=> serchdetail()));
           },
           child: Container(
+            key: key,
             width: MediaQuery.of(context).size.width,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
@@ -30,11 +40,17 @@ class searchpagestate extends State<searchpage>{
             ),
             margin: EdgeInsets.only(top: 5,left: 10,right: 10,bottom: 5),
             padding: const EdgeInsets.only(top: 10,right: 10,left: 10,bottom: 10),
-            child: const Text("Search",style: TextStyle(
-              color: Colors.black,
-              fontSize: 14,
-              fontWeight: FontWeight.w500,
-            ),),
+            child:  Row(
+              children:  [
+                Icon(Icons.search),
+                Container(width: 10/*(key.currentContext?.size?.width)!/2*/,color: Colors.cyan,),
+                Text("Search",style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                ),),
+              ],
+            ),
           ),
         ),
       ),
