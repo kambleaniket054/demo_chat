@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:demo_filter/demo_filter.dart';
 import 'package:demo_filter/demo_facecontroller.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/services.dart';
 
 class arfilterscreen extends StatefulWidget{
@@ -38,12 +39,14 @@ class arfilterscreenstate extends State<arfilterscreen>{
                ondemo_facecontroller: (controller)async{
                  demofacecontroller = controller;
                  demofacecontroller.init();
-                  try {
-                      textureBytes = "assets/fox_face_mesh_texture.png";
-                     texture = await rootBundle.load(textureBytes);
+                 try {
+                    final gsReference = FirebaseStorage.instance.refFromURL("gs://demochat-51a0d.appspot.com/native_face.png");
+                    final gsrefobj = await FirebaseStorage.instance.refFromURL("gs://demochat-51a0d.appspot.com/nosecircle.sfb").getMetadata();
+                      textureBytes = "assets/native_face.png";
+                     texture =/* await rootBundle.load(textureBytes)*/ await gsReference.getData();
                     // if(count == 1){
-                    data ="Mask.sfb";
-                    demofacecontroller.loadmesh(texture,data);
+                    //data ="Mask.sfb";
+                    demofacecontroller.loadmesh(texture,gsrefobj);
                      // textureBytes = await rootBundle.load('assets/fox_face_mesh_texture.png');
                   }  catch (e) {
                     print(e.toString());

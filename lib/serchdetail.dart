@@ -1,3 +1,5 @@
+import 'package:demo_chat/Model/instaPostmodel.dart';
+import 'package:demo_chat/globalfunction.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -28,7 +30,7 @@ class serchdetailstate extends State<serchdetail>{
          ),
          margin: const EdgeInsets.only(top: 15,left: 10,right: 10,bottom: 15),
           padding: const EdgeInsets.only(top: 0,right: 10,left: 10,bottom: 0),
-         child:  const TextField(
+         child:TextField(
            clipBehavior: Clip.hardEdge,
            keyboardType: TextInputType.text,
            decoration: InputDecoration(
@@ -40,11 +42,24 @@ class serchdetailstate extends State<serchdetail>{
              fontWeight: FontWeight.w500,
            ),
            ),
+           onChanged: (val){
+
+           },
          ),
        ),
      ),
      body: Container(
-       color: Colors.white,
+      child: ListView.builder(
+          itemCount: postdata1.length ?? 0,
+          itemBuilder: (context, index){
+     Datum data1;
+     data1 = postdata1[index];
+        return Container(
+        height: 20,
+          color: Colors.red,
+        child: Text(data1.owner.firstName),
+        );
+      }),
      ),
    );
   }

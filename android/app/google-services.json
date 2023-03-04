@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "607342528864",
+    "firebase_url": "https://demochat-51a0d-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "demochat-51a0d",
+    "storage_bucket": "demochat-51a0d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:607342528864:android:f8de156f226e0659847605",
+        "android_client_info": {
+          "package_name": "com.example.demo_chat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "607342528864-3oq919f19c1h6jqbtoc66l5hr4mddhas.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCCcpfz8augT9_IoN8zHuDDNX_NFaqAY7I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "607342528864-3oq919f19c1h6jqbtoc66l5hr4mddhas.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -3,13 +3,18 @@ import 'dart:async';
 import 'package:demo_chat/globalfunction.dart';
 import 'package:demo_chat/loginScreen.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
+
+import 'package:firebase_database/firebase_database.dart';
 
 import 'Homepage.dart';
 import 'detailpage.dart';
 import 'librarypage.dart';
 import 'searchpage.dart';
 
-void main() {
+void main()async{
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(const MyApp());
 }
 
