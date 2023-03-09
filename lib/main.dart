@@ -5,12 +5,12 @@ import 'package:demo_chat/loginScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 
-import 'package:firebase_database/firebase_database.dart';
-
-import 'Homepage.dart';
-import 'detailpage.dart';
-import 'librarypage.dart';
-import 'searchpage.dart';
+// import 'package:firebase_database/firebase_database.dart';
+//
+// import 'Homepage.dart';
+// import 'detailpage.dart';
+// import 'librarypage.dart';
+// import 'searchpage.dart';
 
 void main()async{
   WidgetsFlutterBinding.ensureInitialized();

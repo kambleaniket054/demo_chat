@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:demo_chat/Homepage.dart';
+import 'package:demo_chat/arfilterscreen.dart';
 import 'package:demo_chat/custom/ResumableState.dart';
 import 'package:demo_chat/detailpage.dart';
 import 'package:demo_chat/globalfunction.dart';
@@ -129,7 +130,7 @@ class homescreenstate extends ResumableState<homescreen> with AutomaticKeepAlive
   getscreens(int index) {
     switch(index){
       case 0:
-        return homepage();
+        return arfilterscreen();
       case 1:
         return librarypage();
       case 2:

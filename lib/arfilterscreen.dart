@@ -1,8 +1,12 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:demo_filter/demo_filter.dart';
 import 'package:demo_filter/demo_facecontroller.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/services.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:http/http.dart' as http;
 
 class arfilterscreen extends StatefulWidget{
   arfilterscreenstate  createState ()=> arfilterscreenstate();
@@ -38,17 +42,36 @@ class arfilterscreenstate extends State<arfilterscreen>{
              child: DemoFilter(
                ondemo_facecontroller: (controller)async{
                  demofacecontroller = controller;
-                 demofacecontroller.init();
+
                  try {
-                    final gsReference = FirebaseStorage.instance.refFromURL("gs://demochat-51a0d.appspot.com/native_face.png");
-                    final gsrefobj = await FirebaseStorage.instance.refFromURL("gs://demochat-51a0d.appspot.com/nosecircle.sfb").getMetadata();
+                   final appDocDir = await getApplicationDocumentsDirectory();
+                   final filePath = "${appDocDir.absolute}/images/nosecircle.gltf";
+                   final file = File(filePath);
+                    // final gsReference = FirebaseStorage.instance.refFromURL("gs://demochat-51a0d.appspot.com/native_face.png");
+                     final gsrefobj =  FirebaseStorage.instance.refFromURL("gs://demochat-6f628.appspot.com/nosecircle.gltf");
+                    var news = await gsrefobj.getDownloadURL();
+                     var data = await http.get(Uri.parse(news.toString()));
+                     var res = data.body;
+                     try {
+                       file.writeAsString(res.toString());
+                       var path = gsrefobj.writeToFile(file);
+                       path.snapshotEvents.listen((event) {
+                         if(event == "success"){
+                           demofacecontroller.loadmesh("gs://demochat-6f628.appspot.com/native_face.png",file.uri.toString());
+                         }
+                       print("write response----------------->"+event.state.name);
+                                          });
+                     } on Exception catch (e) {
+                     print("write error");
+                     }
                       textureBytes = "assets/native_face.png";
-                     texture =/* await rootBundle.load(textureBytes)*/ await gsReference.getData();
+                     // texture =/* await rootBundle.load(textureBytes)*/ await gsReference.getData();
                     // if(count == 1){
                     //data ="Mask.sfb";
-                    demofacecontroller.loadmesh(texture,gsrefobj);
+
                      // textureBytes = await rootBundle.load('assets/fox_face_mesh_texture.png');
-                  }  catch (e) {
+                   demofacecontroller.init();
+                                   }  catch (e) {
                     print(e.toString());
                   }
 
