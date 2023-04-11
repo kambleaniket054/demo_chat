@@ -23,7 +23,7 @@ print(url);
   if (response.statusCode != 200) {
     return null;
   }
-  // logText(response.body);
+   print(response.body);
   var toJsonData = json.decode(response.body);
   // getdata();
   return toJsonData;
