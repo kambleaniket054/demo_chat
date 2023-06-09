@@ -1,34 +1,42 @@
 {
   "project_info": {
-    "project_number": "804071045087",
-    "firebase_url": "https://demochat-6f628-default-rtdb.firebaseio.com",
-    "project_id": "demochat-6f628",
-    "storage_bucket": "demochat-6f628.appspot.com"
+    "project_number": "101944246823",
+    "firebase_url": "https://dotchat-c76a1-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "dotchat-c76a1",
+    "storage_bucket": "dotchat-c76a1.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:804071045087:android:758aa7644006355cf0766a",
+        "mobilesdk_app_id": "1:101944246823:android:294b85370b2b3348c64402",
         "android_client_info": {
           "package_name": "com.example.demo_chat"
         }
       },
       "oauth_client": [
         {
-          "client_id": "804071045087-5cgaienf6hsipfbo2bhm9c0gg4f5kfkc.apps.googleusercontent.com",
+          "client_id": "101944246823-v52u0tel61lteq5aqomjc7vh4relipk9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.demo_chat",
+            "certificate_hash": "98ac629d294836a4d4c5519b54e604626a07bd6b"
+          }
+        },
+        {
+          "client_id": "101944246823-aiql3fldo6obvag0296oc6mpc4jvmvgk.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAiaz4lQSVtNhnvNTPPVOWPMZ7Ew_pYD0U"
+          "current_key": "AIzaSyCmRXzt7E__2EmMVMuT9W8AOYWBrOcJ_M4"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "804071045087-5cgaienf6hsipfbo2bhm9c0gg4f5kfkc.apps.googleusercontent.com",
+              "client_id": "101944246823-4d1qodogjgpa8g7r0bs64ig2kuid2inb.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

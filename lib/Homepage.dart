@@ -1,12 +1,15 @@
+import 'dart:async';
+
 import 'package:demo_chat/Model/commentModel.dart';
 import 'package:demo_chat/Model/instaPostmodel.dart';
 import 'package:demo_chat/Vm/vm_post.dart';
 import 'package:demo_chat/arfilterscreen.dart';
 import 'package:demo_chat/globalfunction.dart';
+import 'package:demo_chat/postcomments.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:shimmer/shimmer.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_database/firebase_database.dart';
 
 class homepage extends StatefulWidget{
@@ -14,11 +17,12 @@ class homepage extends StatefulWidget{
 }
 class homepagestate extends State<homepage> with AutomaticKeepAliveClientMixin<homepage>{
 vm_post _vmpost = vm_post();
+StreamController<bool> commentstreams = StreamController<bool>.broadcast();
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    if (postdata1 == null) {
+    if (postdata1 == null || postdata1.length == 0) {
       _vmpost.getpost();
     getdata();
     }
@@ -28,9 +32,14 @@ vm_post _vmpost = vm_post();
   Widget build(BuildContext context) {
    return Scaffold(
      appBar: AppBar(
-       systemOverlayStyle:const SystemUiOverlayStyle(
-         systemNavigationBarColor: Colors.black,
-         systemNavigationBarIconBrightness: Brightness.light,
+       systemOverlayStyle: const SystemUiOverlayStyle(
+           statusBarColor: Colors.white,
+           statusBarBrightness: Brightness.dark,
+           systemNavigationBarColor: Colors.white,
+           systemNavigationBarDividerColor: Colors.black45,
+           systemNavigationBarContrastEnforced: true,
+           systemNavigationBarIconBrightness: Brightness.light,
+           statusBarIconBrightness: Brightness.dark
        ),
        backgroundColor: Colors.white38,
        elevation:0,
@@ -60,9 +69,9 @@ vm_post _vmpost = vm_post();
                    );
                  }
              ));*/
-             Navigator.push(
-                 mainnavigationkey.currentContext!,
-                 CupertinoPageRoute(builder: (_) => arfilterscreen()));
+             // Navigator.push(
+             //     mainnavigationkey.currentContext!,
+             //     CupertinoPageRoute(builder: (_) => arfilterscreen()));
              // pushScreenname(mainnavigationkey.currentContext!,arfilterscreen());
            }
          },
@@ -129,7 +138,7 @@ vm_post _vmpost = vm_post();
               // scrollDirection: Axis.vertical,
                 shrinkWrap: true,
                 addAutomaticKeepAlives: true,
-                itemCount: postdata1.length ?? 5,
+                itemCount: postdata1.length ?? 0,
               primary: false,
                 itemBuilder: (context,index){
                   Datum data1;
@@ -164,10 +173,23 @@ vm_post _vmpost = vm_post();
                        ).copyWith(right: 0),
                        child:  Row(
                          children: [
-                           CircleAvatar(
-                             radius:16,
-                             backgroundImage:NetworkImage(data1.owner.picture) ,
+                           CachedNetworkImage(
+                             imageUrl: data1.owner.picture,
+                             useOldImageOnUrlChange:true,
+                             imageBuilder: (context,im){
+                               return CircleAvatar(
+                                   radius:16,
+                                   backgroundImage:im,
+                               );
+                             },// cacheManager: ,
+                             // progressIndicatorBuilder: (context, url, downloadProgress) =>
+                             //     Center(child: CircularProgressIndicator(value: downloadProgress.progress,color: Colors.black38,backgroundColor: Colors.white54,)),
+                             errorWidget: (context, url, error) => const Icon(Icons.error),
                            ),
+                           /*CircleAvatar(
+                             radius:16,
+                             backgroundImage:NetworkImage(data1.owner.picture),
+                           ),*/
                            const SizedBox(width: 5,),
                            Text(data1.owner.firstName +" "+ data1.owner.lastName,style: const TextStyle(
                              fontWeight: FontWeight.bold,
@@ -182,18 +204,30 @@ vm_post _vmpost = vm_post();
                     alignment: Alignment.center,
                     children: [
                       Container(
-                        height: MediaQuery.of(context).size.height * 0.35,
+                        // height: MediaQuery.of(context).size.height * 0.35,
                         width: double.infinity,
+                        decoration: BoxDecoration(
+                          color: Colors.grey.shade100,
+                          backgroundBlendMode: BlendMode.color
+                        ),
                         //color:Colors.red,
-                        child: Image.network(data1.image,fit:BoxFit.cover,isAntiAlias:true,scale:1,filterQuality: FilterQuality.high),
+                        child: CachedNetworkImage(
+                          imageUrl: data1.image,
+                            useOldImageOnUrlChange:true,
+                          // cacheManager: ,
+                          progressIndicatorBuilder: (context, url, downloadProgress) =>
+                              Center(child: CircularProgressIndicator(value: downloadProgress.progress,color: Colors.black38,backgroundColor: Colors.white54,)),
+                          errorWidget: (context, url, error) => const Icon(Icons.error),
+                        )
+                        // Image.network(data1.image,fit:BoxFit.cover,isAntiAlias:true,scale:1,filterQuality: FilterQuality.high),
                       ),
                     ],
                   ),
                   Row(
                     children: [
-                      IconButton(onPressed: (){}, icon:const Icon(CupertinoIcons.heart),iconSize: 18,),
-                      IconButton(onPressed: (){}, icon:const Icon(CupertinoIcons.share),iconSize: 18,),
-                      IconButton(onPressed: (){}, icon:const Icon(CupertinoIcons.bubble_middle_bottom),iconSize: 18,),
+                      IconButton(onPressed: (){}, icon:const Icon(CupertinoIcons.heart),iconSize: 25,),
+                      IconButton(onPressed: (){}, icon:const Icon(CupertinoIcons.share),iconSize: 25,),
+                      IconButton(onPressed: (){}, icon:const Icon(CupertinoIcons.bubble_middle_bottom),iconSize: 25,),
                     ],
                   ),
                   Container(
@@ -219,13 +253,13 @@ vm_post _vmpost = vm_post();
                           children: [
                             Text(data1.owner.firstName +" "+ data1.owner.lastName,style: const TextStyle(
                               fontWeight: FontWeight.bold,
-                              fontSize: 12,
+                              fontSize: 14,
                             ),),
                             const SizedBox(width: 10,),
                             Flexible(
                               child: Text(data1.text,style: const TextStyle(
                                 fontWeight: FontWeight.normal,
-                                fontSize: 11,
+                                fontSize: 14,
                                // overflow: TextOverflow.ellipsis,
                               ),
                               overflow: TextOverflow.ellipsis,
@@ -237,7 +271,8 @@ vm_post _vmpost = vm_post();
                       ],
                     ),
                   ),
-                  getcomments(data1.id),
+                  postcomments(data1.id,data1),
+                  // getcomments(data1.id,data1),
                 ],
               ),
               );
@@ -268,7 +303,8 @@ vm_post _vmpost = vm_post();
   // TODO: implement wantKeepAlive
   bool get wantKeepAlive => true;
 
-  getcomments(String id) {
+  getcomments(String id, Datum data1) {
+    // getcommentslist(id,commentstreams,data1);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -277,16 +313,18 @@ vm_post _vmpost = vm_post();
           child: createTextThemeWise("Comments", TextStyle(color: Colors.grey)),
         ),
 
-        FutureBuilder<CommentModel>(
-            future: getcommentslist(id),
-            initialData: null,
+        StreamBuilder<bool>(
+            // future: getcommentslist(id),
+          stream: commentstreams.stream,
+            initialData:data1.commentlist != null ? true : false,
             builder: (context,snapshoot){
               CommentModel? data;
-              if (snapshoot.data !=null) {
-                data  = snapshoot.data as CommentModel?;
+              if (snapshoot.data == true) {
+                data  =data1.commentlist;
+                // data1.commentlist = snapshoot.data as CommentModel?;
               }
               print(data?.data.length);
-          return data?.data != null && data?.data.length != 0 ?Container(
+          return data?.data != null ?Container(
             padding: const EdgeInsets.only(left: 16,top: 5,right: 16),
             child: Column(
               children: List.generate(data!.data.length, (index) => Container(
@@ -294,13 +332,13 @@ vm_post _vmpost = vm_post();
                   children: [
                     Text(data!.data[index].owner.firstName +" "+ data!.data[index].owner.lastName,style: const TextStyle(
                       fontWeight: FontWeight.bold,
-                      fontSize: 12,
+                      fontSize: 14,
                     ),),
                     const SizedBox(width: 10,),
                     Flexible(
                       child: Text(data!.data[index].message,style: const TextStyle(
                         fontWeight: FontWeight.normal,
-                        fontSize: 11,
+                        fontSize: 14,
                         // overflow: TextOverflow.ellipsis,
                       ),
                         overflow: TextOverflow.ellipsis,
@@ -317,22 +355,28 @@ vm_post _vmpost = vm_post();
                 ),*/
               )),
             ),
-          ):Container();
+          ):const Center(
+            child:CircularProgressIndicator(color: Colors.black38,backgroundColor: Colors.white54,)
+          );
         }),
       ],
     );
   }
 
-  Future<CommentModel> getcommentslist(String id) async {
-    return await _vmpost.getcommentslist(id);
+   getcommentslist(String id, StreamController<bool> commentstreams, Datum data1) async {
+    if (data1.commentlist == null) {
+      var data =  await _vmpost.getcommentslist(id);
+      data1.commentlist = data ??[];
+    }
+    commentstreams.add(true);
   }
 
   void getdata()async{
     try {
-      var ref = FirebaseDatabase.instance.ref();
+      var ref = FirebaseDatabase.instance.reference();
        ref.once().then((value){
-         print("firebasedata: ${value.snapshot.value}");
-         data = value.snapshot.value;
+         print("firebasedata: ${value.value}");
+         data = value.value;
        });
       // print(snapshot.value);
     } catch (e) {

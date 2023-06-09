@@ -26,11 +26,11 @@ class CommentModel {
 
 class commentsDetails {
   commentsDetails({
-    required this.id,
-    required this.message,
-    required this.owner,
-    required this.post,
-    required this.publishDate,
+     this.id = '',
+     this.message = '',
+     required this.owner,
+     this.post = '',
+     required this.publishDate ,
   });
 
   String id;

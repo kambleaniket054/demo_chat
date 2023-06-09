@@ -4,6 +4,8 @@
 
 import 'dart:convert';
 
+import 'package:demo_chat/Model/commentModel.dart';
+
 InstaPostmodel instaPostmodelFromJson(String str) => InstaPostmodel.fromJson(json.decode(str));
 
 String instaPostmodelToJson(InstaPostmodel data) => json.encode(data.toJson());
@@ -37,6 +39,8 @@ class InstaPostmodel {
 }
 
 class Datum {
+
+
   Datum({
     required this.id,
     required this.image,
@@ -45,6 +49,7 @@ class Datum {
     required this.text,
     required this.publishDate,
     required this.owner,
+    this.commentlist,
   });
 
   String id;
@@ -54,6 +59,7 @@ class Datum {
   String text;
   DateTime publishDate;
   Owner owner;
+  var commentlist;
 
   factory Datum.fromJson(Map<String, dynamic> json) => Datum(
     id: json["id"],

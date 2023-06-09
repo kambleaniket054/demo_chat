@@ -13,11 +13,18 @@ class vm_post{
     // var data;
 api_post _apipost = api_post();
   getpost({ String? url}) async {
-    var res = await _apipost.getpost('https://dummyapi.io/data/v1/post?limit=100');
-    postdata1 = (res['data']).map((i) => Datum.fromJson(i)).toList();
-
-    postcontroller.add(true);
-    return res;
+    try {
+      var res = await _apipost.getpost('https://dummyapi.io/data/v1/post?limit=100');
+      postdata1 = (res['data']).map((i) => Datum.fromJson(i)).toList();
+      //    for(Datum data in postdata1){
+      // var commentdata =  await getcommentslist(data.id);
+      //  data.commentlist = commentdata;
+      //    }
+      postcontroller.add(true);
+      return res;
+    }  catch (e) {
+      print(e.toString());
+    }
   }
   getprofile({ String? id}) async {
     //var res = "https://i.stack.imgur.com/l60Hf.png";
@@ -28,13 +35,15 @@ api_post _apipost = api_post();
     return res.toString();
   }
 
-  Future<CommentModel> getcommentslist(String id)async{
+   getcommentslist(String id)async{
     var res;
     // Map data = HashMap();
     // data.values.elementAt(0);
     try {
        res = await _apipost.getCommentsList('https://dummyapi.io/data/v1/post/${id}/comment?limit=10');
-      return CommentModel.fromJson(res);
+      var data = CommentModel.fromJson(res);
+      return data;
+       // commentstreams.add(true);
     }  catch (e) {
      print(e.toString());
      return CommentModel.fromJson(res.values.elementAt(0));

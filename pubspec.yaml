@@ -45,8 +45,23 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^1.0.0
-  demo_filter:
-    path: ../../Documents/root/demo_filter
+  http: any
+#  shimmer: any
+  cached_network_image_builder: any
+  firebase_storage: 7.0.0
+  firebase_database: 6.0.0
+#  firebase_auth: any
+  firebase_core: 0.7.0
+  firebase_auth: 0.20.1
+  path_provider: 1.6.28
+  google_sign_in: 4.5.9
+  cached_network_image: any
+  flutter_svg: any
+  video_player: any
+
+
+#  demo_filter:
+#    path: ../../Documents/root/demo_filter
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -77,6 +92,9 @@ flutter:
     - assets/umano_digitale.png
     - assets/myimages.imgdb
     - assets/topolino.jpg
+    - assets/black_glasses.png
+    - assets/native_face.png
+    - assets/google.svg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
