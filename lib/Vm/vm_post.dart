@@ -35,15 +35,17 @@ api_post _apipost = api_post();
     return res.toString();
   }
 
-   getcommentslist(String id)async{
+   getcommentslist(String id, Datum data1, StreamController<bool> commentstreams)async{
     var res;
     // Map data = HashMap();
     // data.values.elementAt(0);
     try {
        res = await _apipost.getCommentsList('https://dummyapi.io/data/v1/post/${id}/comment?limit=10');
       var data = CommentModel.fromJson(res);
-      return data;
-       // commentstreams.add(true);
+       // var data =  await _vmpost.getcommentslist(id);
+       data1.commentlist = data ;
+      // return data;
+       commentstreams.add(true);
     }  catch (e) {
      print(e.toString());
      return CommentModel.fromJson(res.values.elementAt(0));

@@ -6,6 +6,7 @@ import 'package:demo_chat/custom/ResumableState.dart';
 import 'package:demo_chat/detailpage.dart';
 import 'package:demo_chat/globalfunction.dart';
 import 'package:demo_chat/librarypage.dart';
+import 'package:demo_chat/photoeditscreen.dart';
 import 'package:demo_chat/searchpage.dart';
 import 'package:demo_chat/userdetails.dart';
 import 'package:flutter/cupertino.dart';
@@ -22,6 +23,7 @@ class homescreenstate extends ResumableState<homescreen> with AutomaticKeepAlive
    bool isblack = false;
   GlobalKey<NavigatorState> navigationkey = GlobalKey<NavigatorState>();
   StreamController<int> changeindexstate = StreamController<int>.broadcast();
+  PageController pageController = PageController(initialPage: 0,keepPage: true);
   //StreamController<int> bottompageController = StreamController<int>.broadcast();
 
 
@@ -77,7 +79,7 @@ class homescreenstate extends ResumableState<homescreen> with AutomaticKeepAlive
           stream: changeindexstate.stream,
           builder: (context, snapshot) {
             return SizedBox(
-              height: 55,
+              height: 45,
               child: BottomNavigationBar(
                 type: BottomNavigationBarType.fixed,
                 currentIndex: index,
@@ -88,17 +90,17 @@ class homescreenstate extends ResumableState<homescreen> with AutomaticKeepAlive
                 showUnselectedLabels: false,
                 iconSize: 24,
                 items:  [
-                  BottomNavigationBarItem(icon: Icon(Icons.home_outlined,color: !isblack ? Colors.black87 : Colors.white ,size: 26,),
-                      activeIcon: Icon(Icons.home_filled,color: !isblack ? Colors.black87 : Colors.white ,size: 26,),
+                  BottomNavigationBarItem(icon: Icon(Icons.home_outlined,color: !isblack ? Colors.black87 : Colors.white ,size: 30,),
+                      activeIcon: Icon(Icons.home_filled,color: !isblack ? Colors.black87 : Colors.white ,size: 30,),
                       label: ""),
-                  BottomNavigationBarItem(icon: Icon(Icons.movie_outlined,color: !isblack ? Colors.black87 : Colors.white ,size: 26,),
-                      activeIcon: Icon(Icons.movie,color: !isblack ? Colors.black87 : Colors.white ,size: 26,),label: ""),
-                  BottomNavigationBarItem(icon: Icon(Icons.add_box_outlined,color: !isblack ? Colors.black87 : Colors.white ,size: 26,),
-                      activeIcon: Icon(Icons.add_box,color: !isblack ? Colors.black87 : Colors.white ,size: 26,),label: ""),
-                  BottomNavigationBarItem(icon: Icon(Icons.search_outlined,color: !isblack ? Colors.black87 : Colors.white ,size: 26,),
-                      activeIcon: Icon(Icons.search_rounded,color: !isblack ? Colors.black87 : Colors.white ,size: 26,),label: ""),
-                  BottomNavigationBarItem(icon: Icon(Icons.person_outline_rounded,color: !isblack ? Colors.black87 : Colors.white ,size: 26,),
-                      activeIcon: Icon(Icons.person,color: !isblack ? Colors.black87 : Colors.white ,size: 26,),label: ""),
+                  BottomNavigationBarItem(icon: Icon(Icons.movie_outlined,color: !isblack ? Colors.black87 : Colors.white ,size: 30,),
+                      activeIcon: Icon(Icons.movie,color: !isblack ? Colors.black87 : Colors.white ,size: 30,),label: ""),
+                  BottomNavigationBarItem(icon: Icon(Icons.add_box_outlined,color: !isblack ? Colors.black87 : Colors.white ,size: 30,),
+                      activeIcon: Icon(Icons.add_box,color: !isblack ? Colors.black87 : Colors.white ,size: 30,),label: ""),
+                  BottomNavigationBarItem(icon: Icon(Icons.search_outlined,color: !isblack ? Colors.black87 : Colors.white ,size: 30,),
+                      activeIcon: Icon(Icons.search_rounded,color: !isblack ? Colors.black87 : Colors.white ,size: 30,),label: ""),
+                  BottomNavigationBarItem(icon: Icon(Icons.person_outline_rounded,color: !isblack ? Colors.black87 : Colors.white ,size: 30,),
+                      activeIcon: Icon(Icons.person,color: !isblack ? Colors.black87 : Colors.white ,size: 30,),label: ""),
                 ],
                 onTap: (index){
                   isblack = false;
@@ -140,6 +142,7 @@ class homescreenstate extends ResumableState<homescreen> with AutomaticKeepAlive
 
                     // pushScreenname(mainnavigationkey.currentContext!,arfilterscreen());
                   }
+                  pageController.animateToPage(index, duration: Duration(microseconds: 1), curve: Curves.ease);
                  // navigationkey.currentState?.pushReplacementNamed(names[index]);
                 },
               ),
@@ -162,12 +165,12 @@ class homescreenstate extends ResumableState<homescreen> with AutomaticKeepAlive
   bool get wantKeepAlive => true;
 
   getBottomScreen() {
-    return StreamBuilder<int>(
-        stream: changeindexstate.stream,
-        initialData: 0,
-        builder: (context, snapshot) {
-      return getscreens(snapshot.data!);
-    });
+    return PageView.builder(
+      // pageSnapping: true,
+        controller: pageController,
+        physics: NeverScrollableScrollPhysics(),
+        itemCount: 5,
+        itemBuilder: (context,index) => getscreens(index));
   }
 
   getscreens(int index) {
@@ -176,6 +179,8 @@ class homescreenstate extends ResumableState<homescreen> with AutomaticKeepAlive
         return homepage();
       case 1:
         return librarypage();
+      case 2:
+        return PhotoEditingScreen();
       case 3:
         return searchpage();
       case 4:

@@ -4,6 +4,7 @@ import 'package:demo_chat/globalfunction.dart';
 import 'package:demo_chat/loginScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 // import 'package:firebase_database/firebase_database.dart';
 //
@@ -60,9 +61,30 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     mainnavigationkey = _mainnavigationkey;
-    return MaterialApp(
-      navigatorKey: _mainnavigationkey,
-      home:loginscreen(),
+    return WillPopScope(
+      onWillPop: (){
+        closelogin();
+        return Future.value(true);
+      },
+      child: MaterialApp(
+        navigatorKey: _mainnavigationkey,
+        home:loginscreen(),
+      ),
     );
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    closelogin();
+  }
+
+  void closelogin()async {
+    try {
+      await GoogleSignIn().signOut();
+    } catch (e) {
+     print(e.toString()); // TODO
+    }
   }
 }

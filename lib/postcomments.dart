@@ -34,10 +34,10 @@ class postcommentsstate extends State<postcomments>{
 
   getcommentslist(String id, StreamController<bool> commentstreams, Datum data1) async {
     if (data1.commentlist == null) {
-      var data =  await _vmpost.getcommentslist(id);
-      data1.commentlist = data ??[];
+     /* var data =  await*/ _vmpost.getcommentslist(id,data1,commentstreams);
+      // data1.commentlist = data ?? [];
     }
-    commentstreams.add(true);
+    // commentstreams.add(true);
   }
 
   @override
@@ -54,27 +54,27 @@ class postcommentsstate extends State<postcomments>{
         StreamBuilder<bool>(
           // future: getcommentslist(id),
             stream: commentstreams.stream,
-            initialData:data1.commentlist != null ? true : false,
+            initialData:false,
             builder: (context,snapshoot){
               CommentModel? data;
               if (snapshoot.data == true) {
                 data  =data1.commentlist;
+                print(data?.data.length);
                 // data1.commentlist = snapshoot.data as CommentModel?;
               }
-              print(data?.data.length);
-              return data?.data != null ?Container(
+              return snapshoot.data == true ? Container(
                 padding: const EdgeInsets.only(left: 16,top: 5,right: 16),
                 child: Column(
                   children: List.generate(data!.data.length, (index) => Container(
                       child: Row(
                         children: [
-                          Text(data!.data[index].owner.firstName +" "+ data!.data[index].owner.lastName,style: const TextStyle(
+                          Text(data!.data[index].owner.firstName +" "+ data.data[index].owner.lastName,style: const TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 14,
                           ),),
                           const SizedBox(width: 10,),
                           Flexible(
-                            child: Text(data!.data[index].message,style: const TextStyle(
+                            child: Text(data.data[index].message,style: const TextStyle(
                               fontWeight: FontWeight.normal,
                               fontSize: 14,
                               // overflow: TextOverflow.ellipsis,

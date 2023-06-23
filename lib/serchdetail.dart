@@ -26,7 +26,7 @@ class serchdetailstate extends State<serchdetail>{
        leadingWidth: 25,
        // automaticallyImplyLeading: true,
        leading: IconButton(
-         icon: Icon(Icons.arrow_back, color: Colors.black54,), onPressed: () {  },
+         icon: Icon(Icons.arrow_back, color: Colors.black54,), onPressed: () {  Navigator.pop(context);},
        ),
        title: Padding(
          padding: const EdgeInsets.only(top: 25,left: 10,right: 10,bottom: 25),
@@ -64,7 +64,7 @@ class serchdetailstate extends State<serchdetail>{
      body: Container(
       child: ListView.builder(
         padding: const EdgeInsets.only(top: 10,left: 10),
-          itemCount: postdata1!.length ?? 0,
+          itemCount: postdata1.length,
           itemBuilder: (context, index){
      Datum data1;
      data1 = postdata1[index];
