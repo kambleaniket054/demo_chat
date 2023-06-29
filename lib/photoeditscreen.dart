@@ -5,6 +5,7 @@ import 'package:flutter_ffmpeg/flutter_ffmpeg.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
 
 class PhotoEditingScreen extends StatefulWidget {
   @override
@@ -23,11 +24,14 @@ class _PhotoEditingScreenState extends State<PhotoEditingScreen> {
       //   _image = File(pickedFile.path);
       // });
     }
+    Directory externalStorageDirectory = await getExternalStorageDirectory();
+    String externalStoragePath = externalStorageDirectory.path;
+
     final String inputImagePath = File(pickedFile.path).path;
-    final String outputImagePath = File('/path/to/output/edited_image.jpg').path;
+    final String outputImagePath = externalStoragePath.toString();
 
     final String ffmpegCommand =
-        '-i $inputImagePath -vf "colorchannelmixer=0.5:0:0:0:0.5:0:0:0:0.5:0" $outputImagePath';
+        '-i $inputImagePath -vf  colorchannelmixer=.393:.769:.189:0:.349:.686:.168:0:.272:.534:.131 -vframes 1 $outputImagePath/new2.jpg';
 
     final int rc = await _flutterFFmpeg.execute(ffmpegCommand);
 
@@ -35,9 +39,11 @@ class _PhotoEditingScreenState extends State<PhotoEditingScreen> {
       print('Photo edited successfully');
 
       // Upload edited photo to Firebase Storage
-      editedImageFile = File(outputImagePath);
+      editedImageFile = File("${outputImagePath}/new2.jpg");
       final String storagePath = 'photos/${DateTime.now().microsecondsSinceEpoch}.jpg';
+setState(() {
 
+});
       try {
         // final Reference storageRef = FirebaseStorage.instance.ref().child(storagePath);
         // await storageRef.putFile(editedImageFile);

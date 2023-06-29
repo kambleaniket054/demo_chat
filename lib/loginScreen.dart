@@ -162,7 +162,7 @@ class loginscreenState  extends State<loginscreen>{
                                email:_conusername.text,
                                password: _conpswd.text,
                            );
-                           if(credential !=null){
+                           if(credential ==null){
                              return;
                            }
                            Navigator.pushReplacement(mainnavigationkey.currentContext!,MaterialPageRoute (builder: (BuildContext context) =>  homescreen()));
