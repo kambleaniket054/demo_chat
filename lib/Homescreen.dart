@@ -4,6 +4,7 @@ import 'package:demo_chat/Homepage.dart';
 import 'package:demo_chat/arfilterscreen.dart';
 import 'package:demo_chat/custom/ResumableState.dart';
 import 'package:demo_chat/detailpage.dart';
+import 'package:demo_chat/edit_photo/edit_photo_page.dart';
 import 'package:demo_chat/globalfunction.dart';
 import 'package:demo_chat/librarypage.dart';
 import 'package:demo_chat/photoeditscreen.dart';
@@ -12,6 +13,8 @@ import 'package:demo_chat/userdetails.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
+import 'edit_photo/view/edit_photo_view.dart';
 
 class homescreen extends StatefulWidget{
   createState()=> homescreenstate();
@@ -180,7 +183,7 @@ class homescreenstate extends ResumableState<homescreen> with AutomaticKeepAlive
       case 1:
         return librarypage();
       case 2:
-        return PhotoEditingScreen();
+        return EditPhotoPage();
       case 3:
         return searchpage();
       case 4:
