@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:demo_chat/Messages.dart';
 import 'package:demo_chat/Model/commentModel.dart';
 import 'package:demo_chat/Model/instaPostmodel.dart';
 import 'package:demo_chat/Vm/vm_post.dart';
@@ -50,6 +51,11 @@ StreamController<bool> commentstreams = StreamController<bool>.broadcast();
          fontSize: 24,
          fontWeight: FontWeight.w500,
        ),),
+       actions: [
+         IconButton(onPressed: (){
+           Navigator.push(context, MaterialPageRoute(builder: (context)=>messages()));
+         }, icon:const Icon(Icons.message, color: Colors.black87,))
+       ],
      ),
      body: GestureDetector(
          onHorizontalDragStart: (details){

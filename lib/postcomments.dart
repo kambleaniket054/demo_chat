@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:demo_chat/custom/ResumableState.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -16,7 +17,7 @@ class postcomments extends StatefulWidget{
   createState() => postcommentsstate();
 }
 
-class postcommentsstate extends State<postcomments>{
+class postcommentsstate extends  ResumableState<postcomments>{
   late Datum data1;
   late String id;
   final vm_post _vmpost = vm_post();
@@ -27,9 +28,12 @@ class postcommentsstate extends State<postcomments>{
     super.initState();
      data1 = widget.data;
      id = widget.id;
-    getcommentslist(id,commentstreams,data1);
   }
 
+  @override
+  onReady(){
+    getcommentslist(id,commentstreams,data1);
+  }
 
 
   getcommentslist(String id, StreamController<bool> commentstreams, Datum data1) async {
@@ -42,12 +46,11 @@ class postcommentsstate extends State<postcomments>{
 
   @override
   Widget build(BuildContext context) {
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
-          padding: const EdgeInsets.only(left: 16,top: 5,right: 16),
+          padding: const EdgeInsets   .only(left: 16,top: 5,right: 16),
           child: createTextThemeWise("Comments", TextStyle(color: Colors.grey)),
         ),
 

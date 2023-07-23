@@ -13,5 +13,5 @@ pushScreenname(BuildContext context, var data){
 }
 
 createTextThemeWise(String value, TextStyle style){
-  return Text(value, style: style,textAlign: TextAlign.center,);
+  return Text(value, style: style,textAlign: TextAlign.center,softWrap: true,);
 }
