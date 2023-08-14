@@ -19,7 +19,7 @@ class searchpagestate extends State<searchpage> with AutomaticKeepAliveClientMix
     Future.delayed(const Duration(seconds: 3),(){
       print(key.currentContext?.size?.width);
     });
-    _vmpost.getpost();
+    // _vmpost.getpost();
   }
   @override
   Widget build(BuildContext context) {

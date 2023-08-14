@@ -1,3 +1,4 @@
+/*
 import 'dart:math';
 import 'dart:ui';
 
@@ -284,4 +285,316 @@ class loginscreenState  extends State<loginscreen>{
     }
   }
 
+}
+*/
+import 'package:flutter/material.dart';
+import 'dart:math';
+import 'dart:ui';
+
+import 'package:demo_chat/Homescreen.dart';
+import 'package:demo_chat/globalfunction.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'Homescreen.dart';
+import 'globalfunction.dart';
+
+class loginscreen extends StatelessWidget {
+  // LoginPage({super.key});
+
+  // text editing controllers
+  final usernameController = TextEditingController();
+  final passwordController = TextEditingController();
+
+  // sign user in method
+  Future<void> signUserIn() async {
+    try {
+      final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email:usernameController.text,
+        password: passwordController.text,
+      );
+      if(credential ==null){
+        return;
+      }
+      Navigator.pushReplacement(mainnavigationkey.currentContext!,MaterialPageRoute (builder: (BuildContext context) =>  homescreen()));
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        print('No user found for that email.');
+      } else if (e.code == 'wrong-password') {
+        print('Wrong password provided for that user.');
+      }
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.grey[300],
+      body: SafeArea(
+        child: Center(
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const SizedBox(height: 50),
+
+                // logo
+                Container(
+                  padding: const EdgeInsets.all(10),
+                  decoration:  BoxDecoration(
+                    border: Border.all(color: Colors.white),
+                    // borderRadius: BorderRadius.circular(16),
+                    shape: BoxShape.circle,
+                    color: Colors.grey[200],
+                    // color: Color(0XFFFCFCFC),
+                    // shape: BoxShape.circle,
+                    // boxShadow: [
+                    //   // BoxShadow(color: Colors.black38,
+                    //   //   offset: Offset(4,2),
+                    //   //   blurRadius: 3,
+                    //   //   // inset:true,
+                    //   // ),
+                    //   // BoxShadow(color: Colors.white70,
+                    //   //     offset: Offset(-5,-2),
+                    //   //     blurRadius: 2
+                    //   // ),
+                    // ],
+                  ),
+                  child: Container(
+                    padding: EdgeInsets.all(30),
+                    decoration: const BoxDecoration(
+                      color: Colors.black,
+                      shape: BoxShape.circle,
+                      border: Border.fromBorderSide(BorderSide(color: Colors.black)),
+                      // boxShadow: [
+                      //   BoxShadow(color: Colors.black38,
+                      //     offset: Offset(4,2),
+                      //     blurRadius: 3,
+                      //     // inset:true,
+                      //   ),
+                      //   BoxShadow(color: Colors.white70,
+                      //       offset: Offset(-5,-2),
+                      //       blurRadius: 2
+                      //   ),
+                      // ],
+                    ),
+                    child: createTextThemeWise("DOT", const TextStyle(
+                      fontSize: 26,
+                      // backgroundColor: Colors.white,
+                      // height: 14,
+                      fontWeight: FontWeight.bold,
+                      // shadows: [
+                      //   Shadow(color: Colors.red,offset: Offset(1, 1),blurRadius: 5),
+                      // ],
+                      fontStyle: FontStyle.italic,
+                      color: Colors.white,
+                      // decorationColor: Colors.black38,
+                    )),
+                  ),
+                ),
+               /* Container(
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.white
+                  ),
+                  padding: EdgeInsets.all(20),
+                  child: const Icon(
+                    Icons.person,
+                    size: 100,
+                  ),
+                ),*/
+
+                const SizedBox(height: 50),
+
+                // welcome back, you've been missed!
+               /* Text(
+                  'Welcome back you\'ve been missed!',
+                  style: TextStyle(
+                    color: Colors.grey[700],
+                    fontSize: 16,
+                  ),
+                ),*/
+
+                // const SizedBox(height: 25),
+
+                // username textfield
+                MyTextField(
+                  controller: usernameController,
+                  hintText: 'Username',
+                  obscureText: false,
+                ),
+
+                const SizedBox(height: 10),
+
+                // password textfield
+                MyTextField(
+                  controller: passwordController,
+                  hintText: 'Password',
+                  obscureText: true,
+                ),
+
+                const SizedBox(height: 10),
+
+                // forgot password?
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Text(
+                        'Forgot Password?',
+                        style: TextStyle(color: Colors.grey[600]),
+                      ),
+                    ],
+                  ),
+                ),
+
+                const SizedBox(height: 25),
+
+                // sign in button
+                MyButton(
+                  onTap: signUserIn,
+                ),
+
+                const SizedBox(height: 50),
+
+                // or continue with
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Divider(
+                          thickness: 0.5,
+                          color: Colors.grey[400],
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                        child: Text(
+                          'Or continue with',
+                          style: TextStyle(color: Colors.grey[700]),
+                        ),
+                      ),
+                      Expanded(
+                        child: Divider(
+                          thickness: 0.5,
+                          color: Colors.grey[400],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
+                const SizedBox(height: 50),
+
+                // google + apple sign in buttons
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children:  [
+                    // google button
+                    SquareTile(imagePath: 'assets/google.png'),
+
+                    const SizedBox(width: 25),
+
+                    // apple button
+                    SquareTile(imagePath: 'assets/apple.png')
+                  ],
+                ),
+
+                const SizedBox(height: 50),
+
+                // not a member? register now
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'Not a member?',
+                      style: TextStyle(color: Colors.grey[700]),
+                    ),
+                    const SizedBox(width: 4),
+                    const Text(
+                      'Register now',
+                      style: TextStyle(
+                        color: Colors.blue,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                )
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+  
+  
+  
+  
+}
+
+SquareTile({required String imagePath}) {
+  return Container(
+    padding: EdgeInsets.all(20),
+    decoration: BoxDecoration(
+      border: Border.all(color: Colors.white),
+      // borderRadius: BorderRadius.circular(16),
+      shape: BoxShape.circle,
+      color: Colors.grey[200],
+    ),
+    child: Image.asset(
+      imagePath,
+      height: 40,
+    ),
+  );
+}
+
+MyTextField({required TextEditingController controller, required String hintText, required bool obscureText}) {
+  return Padding(
+    padding: const EdgeInsets.symmetric(horizontal: 25.0),
+    child: TextField(
+      controller: controller,
+      obscureText: obscureText,
+      decoration: InputDecoration(
+          enabledBorder: const OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.white),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.grey.shade400),
+          ),
+          fillColor: Colors.grey.shade200,
+          filled: true,
+          hintText: hintText,
+          hintStyle: TextStyle(color: Colors.grey[500])),
+    ),
+  );
+}
+
+Widget MyButton({void Function()? onTap}) {
+  return GestureDetector(
+    onTap: onTap,
+    child: Container(
+      padding: const EdgeInsets.all(25),
+      margin: const EdgeInsets.symmetric(horizontal: 25),
+      decoration: BoxDecoration(
+        color: Colors.black,
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: const Center(
+        child: Text(
+          "Sign In",
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+            fontSize: 16,
+          ),
+        ),
+      ),
+    ),
+  );
 }

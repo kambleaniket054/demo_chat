@@ -5,6 +5,7 @@ import 'package:bloc/bloc.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:path_provider/path_provider.dart';
 
+import '../../globalfunction.dart';
 import '../photo.dart';
 import '../status_download.dart';
 import '../widget/dragable_widget.dart';
@@ -30,34 +31,40 @@ class EditPhotoCubit extends Cubit<EditPhotoState> {
   }
 
   void addWidget(DragableWidget widget) {
+    // datacontroller.add(true);
     emit(state.copyWith(
       widgets: List.of(state.widgets)..add(widget),
     ));
+    Listwidgets = List.of(state.widgets)..add(widget);
+    datacontroller.add(true);
   }
 
   void changeWidgetState(WidgetState widgetState) {
     emit(state.copyWith(
       widgetState: widgetState,
     ));
+    datacontroller.add(true);
   }
 
   void editWidget(int uniqueKey, DragableWidgetChild newChild) {
     var index = state.widgets.indexWhere((e) => e.uniqueKey == uniqueKey);
     if (index == -1) return;
-
     state.widgets[index].child = newChild;
 
     emit(state.copyWith(
       widgetState: WidgetState.edited,
       widgets: List.from(state.widgets),
     ));
+    Listwidgets = List.of(state.widgets);
   }
 
   void deleteWidget(int uniqueKey) {
     emit(state.copyWith(
       widgets: List.of(state.widgets)
         ..removeWhere((e) => e.uniqueKey == uniqueKey),
+
     ));
+    Listwidgets.removeWhere((e) => e.uniqueKey == uniqueKey);
   }
 
   void changeDownloadState(StatusDownload status) {

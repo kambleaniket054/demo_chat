@@ -5,6 +5,7 @@ import 'package:demo_chat/loginScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 // import 'package:firebase_database/firebase_database.dart';
 //
@@ -16,6 +17,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 void main()async{
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+
   runApp(const MyApp());
 }
 

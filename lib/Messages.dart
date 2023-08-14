@@ -1,6 +1,7 @@
 import 'package:demo_chat/globalfunction.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'ChatScreen.dart';
 
@@ -9,6 +10,17 @@ class messages extends StatefulWidget{
 }
 
 class messagesState extends State<messages>{
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    // firestore.collection("/1234567890").get().then((value){
+    //
+    // });
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,15 +43,27 @@ class messagesState extends State<messages>{
 
   messagesListview(){
     return Expanded(
-      child: ListView.separated(
-          itemCount: 10,
-          shrinkWrap: true,
-          scrollDirection: Axis.vertical,
-          itemBuilder:(context,index){
-        return listItem();
-      }, separatorBuilder: (BuildContext context, int index) {
-            return const Divider(height: 1,indent: 15.0,endIndent: 15.0,);
-      },),
+      child: StreamBuilder<QuerySnapshot>(
+        stream: firestore.collection("/1234567890").snapshots(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+          // snapshot.data.docs;
+            return ListView.separated(
+              itemCount: 10,
+              shrinkWrap: true,
+              scrollDirection: Axis.vertical,
+              itemBuilder: (context, index) {
+                return listItem();
+              },
+              separatorBuilder: (BuildContext context, int index) {
+                return const Divider(height: 1, indent: 15.0, endIndent: 15.0,);
+              },);
+        }
+      ),
     );
   }
   // https://i.redd.it/zbuam1y2pvx21.jpg

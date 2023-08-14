@@ -16,10 +16,14 @@ api_post _apipost = api_post();
     try {
       var res = await _apipost.getpost('https://dummyapi.io/data/v1/post?limit=100');
       postdata1 = (res['data']).map((i) => Datum.fromJson(i)).toList();
-      //    for(Datum data in postdata1){
-      // var commentdata =  await getcommentslist(data.id);
-      //  data.commentlist = commentdata;
-      //    }
+         for(Datum data in postdata1){
+           Map<String,dynamic> commentmap = HashMap();
+          commentmap["id"] = data.id;
+           // var commentstreams = commentmap['commentStream'];
+           commentmap['data1']= data;
+      var commentdata =  await getcommentslist(commentmap);
+       // data.commentlist = commentdata;
+         }
       postcontroller.add(true);
       return res;
     }  catch (e) {
@@ -35,17 +39,21 @@ api_post _apipost = api_post();
     return res.toString();
   }
 
-   getcommentslist(String id, Datum data1, StreamController<bool> commentstreams)async{
+   getcommentslist(Map<String, dynamic> commentmap)async{
     var res;
     // Map data = HashMap();
     // data.values.elementAt(0);
+   var id =  commentmap["id"];
+   // var commentstreams = commentmap['commentStream'];
+   var data1 = commentmap['data1'];
     try {
        res = await _apipost.getCommentsList('https://dummyapi.io/data/v1/post/${id}/comment?limit=10');
       var data = CommentModel.fromJson(res);
        // var data =  await _vmpost.getcommentslist(id);
        data1.commentlist = data ;
       // return data;
-       commentstreams.add(true);
+      //  commentstreams.add(true);
+       return res;
     }  catch (e) {
      print(e.toString());
      return CommentModel.fromJson(res.values.elementAt(0));

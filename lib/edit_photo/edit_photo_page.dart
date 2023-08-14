@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:demo_chat/edit_photo/status_download.dart';
 import 'package:demo_chat/edit_photo/view/edit_photo_view.dart';
 import 'package:demo_chat/edit_photo/widget/dragable_widget.dart';
@@ -11,16 +13,17 @@ import 'menu/delete_text/delete_text_dialog.dart';
 
 class EditPhotoPage extends StatelessWidget {
   EditPhotoPage({Key? key}) : super(key: key);
-
+  StreamController<WidgetState> backbuttonstate = StreamController.broadcast();
   final screenshotController = ScreenshotController();
 
   @override
   Widget build(BuildContext context) {
     // final Photo photo = ModalRoute.of(context)?.settings.arguments as Photo;
 
+
     return WillPopScope(
       onWillPop: () async {
-        return false;
+        return Future.value(false);
         // final result = await showDialogConfirmationToExit(context);
         // return result;
       },
@@ -103,29 +106,15 @@ class EditPhotoPage extends StatelessWidget {
                 child: const EditPhotoView(),
               ),
             ),*/
-            Positioned(
-              left: 20,
-              top: MediaQuery.of(context).padding.top + 20,
-              child:Visibility(
-                visible: true,
-                maintainState: true,
-                child: iconButton(
-                  onTap: () async {
-                    // final result = await showDialogConfirmationToExit(
-                    //   context,
-                    // );
-                    // if (result == null) return;
-                    //
-                    // if (result) {
-                    Navigator.pop(context);
-                    // }
-                  },
-                  icon: Icons.arrow_back_ios_new_rounded,
-                ),
-              ) /*BlocBuilder<EditPhotoCubit, EditPhotoState>(
-                builder: (context, state) {
-                  return Visibility(
-                    visible: state.widgetState != WidgetState.editing,
+            StreamBuilder<WidgetState>(
+              stream: backbuttonstate.stream,
+              initialData: WidgetState.editing,
+              builder: (context, snapshot) {
+                return Positioned(
+                  left: 20,
+                  top: MediaQuery.of(context).padding.top + 20,
+                  child:Visibility(
+                    visible: snapshot.data != WidgetState.editing,
                     maintainState: true,
                     child: iconButton(
                       onTap: () async {
@@ -135,35 +124,61 @@ class EditPhotoPage extends StatelessWidget {
                         // if (result == null) return;
                         //
                         // if (result) {
-                          Navigator.pop(context);
+                        Navigator.pop(context);
                         // }
                       },
                       icon: Icons.arrow_back_ios_new_rounded,
                     ),
-                  );
-                },
-              )*/,
+                  ) /*BlocBuilder<EditPhotoCubit, EditPhotoState>(
+                    builder: (context, state) {
+                      return Visibility(
+                        visible: state.widgetState != WidgetState.editing,
+                        maintainState: true,
+                        child: iconButton(
+                          onTap: () async {
+                            // final result = await showDialogConfirmationToExit(
+                            //   context,
+                            // );
+                            // if (result == null) return;
+                            //
+                            // if (result) {
+                              Navigator.pop(context);
+                            // }
+                          },
+                          icon: Icons.arrow_back_ios_new_rounded,
+                        ),
+                      );
+                    },
+                  )*/,
+                );
+              }
             ),
-            Positioned(
-              right: 20,
-              top: MediaQuery.of(context).padding.top + 20,
-              child:Visibility(
-                visible: true,
-                maintainState: true,
-                child: MenuAction(
-                  screenshotController: screenshotController,
-                ),
-              ) /*BlocBuilder<EditPhotoCubit, EditPhotoState>(
-                builder: (context, state) {
-                  return Visibility(
-                    visible: state.widgetState != WidgetState.editing,
+            StreamBuilder<WidgetState>(
+                stream: backbuttonstate.stream,
+                initialData: WidgetState.editing,
+              builder: (context, snapshot) {
+                return Positioned(
+                  right: 20,
+                  top: MediaQuery.of(context).padding.top + 20,
+                  child:Visibility(
+                    visible: snapshot.data != WidgetState.editing,
                     maintainState: true,
                     child: MenuAction(
                       screenshotController: screenshotController,
                     ),
-                  );
-                },
-              )*/,
+                  ) /*BlocBuilder<EditPhotoCubit, EditPhotoState>(
+                    builder: (context, state) {
+                      return Visibility(
+                        visible: state.widgetState != WidgetState.editing,
+                        maintainState: true,
+                        child: MenuAction(
+                          screenshotController: screenshotController,
+                        ),
+                      );
+                    },
+                  )*/,
+                );
+              }
             ),
             Positioned(
               left: 20,
@@ -202,21 +217,26 @@ class EditPhotoPage extends StatelessWidget {
                 )*/,
               ),
             ),
-            const Positioned(
-              left: 20,
-              bottom: 20,
-              child:   Visibility(
-                  visible: true,
-                  child: MenuEdit())/*BlocBuilder<EditPhotoCubit, EditPhotoState>(
-                builder: (context, state) {
-                  return Visibility(
-                    visible: state.widgetState != WidgetState.editing,
-                    maintainState: true,
-                    child: const MenuEdit(),
-                  );
-                },
-              )*/,
-            ),
+             StreamBuilder<Object>(
+               stream: backbuttonstate.stream,
+               builder: (context, snapshot) {
+                 return Positioned(
+                  left: 20,
+                  bottom: 20,
+                  child:   Visibility(
+                      visible: snapshot.data != WidgetState.editing,
+                      child: MenuEdit(controller: backbuttonstate,))/*BlocBuilder<EditPhotoCubit, EditPhotoState>(
+                    builder: (context, state) {
+                      return Visibility(
+                        visible: state.widgetState != WidgetState.editing,
+                        maintainState: true,
+                        child: const MenuEdit(),
+                      );
+                    },
+                  )*/,
+            );
+               }
+             ),
           ],
         ),
       ),
@@ -307,7 +327,8 @@ class MenuAction extends StatelessWidget {
 }
 
 class MenuEdit extends StatelessWidget {
-  const MenuEdit({Key? key}) : super(key: key);
+  StreamController controller;
+   MenuEdit({Key? key,required this.controller}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -326,16 +347,18 @@ class MenuEdit extends StatelessWidget {
           icon: Icons.text_fields_rounded,
           onTap: () async {
             /// change state to editing
-            /// so the menu UI will not visible while add/edit text
-            context
-                .read<EditPhotoCubit>()
-                .changeWidgetState(WidgetState.editing);
+            // /// so the menu UI will not visible while add/edit text
+            // context
+            //     .read<EditPhotoCubit>()
+            //     .changeWidgetState(WidgetState.editing);
+            controller.add(WidgetState.editing);
 
             /// wait for text edit done / cancel
             final result = await addText(context) as DragableWidgetTextChild?;
 
             /// change state to idle
             /// so the menu UI will visible again
+            controller.add(WidgetState.idle);
             context.read<EditPhotoCubit>().changeWidgetState(WidgetState.idle);
 
             /// if user cancel add/edit text do nothing
@@ -354,9 +377,10 @@ class MenuEdit extends StatelessWidget {
                 if (child is DragableWidgetTextChild) {
                   /// change state to editing
                   /// so the menu UI will not visible while add/edit text
-                  context
-                      .read<EditPhotoCubit>()
-                      .changeWidgetState(WidgetState.editing);
+                  // context
+                  //     .read<EditPhotoCubit>()
+                  //     .changeWidgetState(WidgetState.editing);
+                  controller.add(WidgetState.editing);
 
                   /// wait for text edit done / cancel
                   final result = await addText(
@@ -366,10 +390,10 @@ class MenuEdit extends StatelessWidget {
 
                   /// change state to idle
                   /// so the menu UI will visible again
-                  context
-                      .read<EditPhotoCubit>()
-                      .changeWidgetState(WidgetState.idle);
-
+                  // context
+                  //     .read<EditPhotoCubit>()
+                  //     .changeWidgetState(WidgetState.idle);
+                  controller.add(WidgetState.idle);
                   /// if user cancel add/edit text do nothing
                   if (result == null) return;
 

@@ -1,8 +1,12 @@
+import 'dart:convert';
 import 'dart:math';
 import 'package:chat_bubbles/chat_bubbles.dart';
 import 'package:demo_chat/globalfunction.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+import 'Colorcode.dart';
 
 class ChatScreen extends StatefulWidget{
   createState()=> chatscreenstate();
@@ -10,6 +14,8 @@ class ChatScreen extends StatefulWidget{
 
 class chatscreenstate extends State<ChatScreen>{
   ScrollController listscrolcontrol = ScrollController();
+  List snapdata = [];
+
   @override
   void initState() {
     // TODO: implement initState
@@ -22,9 +28,9 @@ class chatscreenstate extends State<ChatScreen>{
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: true,
-      backgroundColor: Colors.grey[100],
+      backgroundColor:Colorcode.backgroundcolor,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: Colorcode.foreground,
         elevation: 0,
         leading: IconButton(
            padding: EdgeInsets.zero,
@@ -46,29 +52,48 @@ class chatscreenstate extends State<ChatScreen>{
       body: Column(
         children: [
           Expanded(
-            child: ListView.builder(
-              controller: listscrolcontrol,
-              scrollDirection: Axis.vertical,
-              shrinkWrap: true,
-                itemCount: 100,
-                itemBuilder:(context,index){
-              bool fromuser = false;
-              if(index%2 ==0 ){
-                fromuser = true;
+            child: StreamBuilder<DocumentSnapshot>(
+              // initialData: [],
+              stream: firestore.collection("/1234567890").doc("Zx5d4ejP6eAJJJmxLhIh").snapshots(),
+              builder: (context, snapshot) {
+               try {
+                 if(snapshot.connectionState == ConnectionState.waiting){
+                   return Center(child: CircularProgressIndicator(),);
+                 }
+                  if (snapshot.connectionState == ConnectionState.active) {
+                    snapdata = snapshot.data!.data()['messages'] ;
+                  }
+                 // print("firestore data------>"+data["messages"]);
+               } on Exception catch (e) {
+                 // TODO
+               }
+                return ListView.builder(
+                  controller: listscrolcontrol,
+                  scrollDirection: Axis.vertical,
+                  shrinkWrap: true,
+                    padding: const EdgeInsets.symmetric(vertical: 10,horizontal: 8),
+                    itemCount: snapdata.length,
+                    itemBuilder:(context,index){
+                  bool fromuser = false;
+                  if(index%2 ==0 ){
+                    fromuser = true;
+                  }
+                  return Container(
+                    height: 100,
+                    // decoration: BoxDecoration(
+                      // color: Colors.red,
+                    //   border: Border.all(color: Colors.white54)
+                    // ),
+                    // alignment:fromuser ? Alignment.centerRight : Alignment.centerLeft,
+                    child: BubbleSpecialOne(
+                      isSender:fromuser,
+                      color: Colorcode.foreground,
+                      delivered:fromuser ? true:false,
+                      text: snapdata[index]['content'].toString(),),
+                  );
+                });
               }
-              return Container(
-                height: 100,
-                // decoration: BoxDecoration(
-                //   // color: Colors.red,
-                //   border: Border.all(color: Colors.white54)
-                // ),
-                // alignment:fromuser ? Alignment.centerRight : Alignment.centerLeft,
-                child: BubbleSpecialOne(
-                  isSender:fromuser,
-                  delivered:fromuser ? true:false,
-                  text: index.toString(),),
-              );
-            }),
+            ),
           ),
         ],
       ),
@@ -94,10 +119,10 @@ class chatscreenstate extends State<ChatScreen>{
         child: Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(24),
-            color: Colors.grey[300]
+            color: Colorcode.foreground,
           ),
-          margin: EdgeInsets.only(left: 15,right: 15,bottom: 10),
-          padding: EdgeInsets.only(left: 0,right: 15,top: 5,bottom: 5),
+          margin: const EdgeInsets.only(left: 10,right: 10,bottom: 10),
+          padding: const EdgeInsets.only(left: 8,right: 15,top: 5,bottom: 5),
           child: Row(
             children:  [
               Flexible(
@@ -117,14 +142,14 @@ class chatscreenstate extends State<ChatScreen>{
                   ),
                   autocorrect: true,
                   decoration: InputDecoration(
-                    fillColor: Colors.white,
-                    contentPadding: EdgeInsets.only(left: 8,right:10,top: 8,bottom: 8),
+                    fillColor: Colorcode.backgroundcolor,
+                    contentPadding: const EdgeInsets.only(left: 8,right:10,top: 8,bottom: 8),
                     hintText: "Message",
                     border: OutlineInputBorder(
                       gapPadding: 18,
                       borderRadius: BorderRadius.circular(24.0),
                       borderSide: BorderSide(
-                        color: Colors.white54
+                        color: Colorcode.backgroundcolor
                       ),
                     ),
                     // suffixIcon: IconButton(onPressed: (){},icon:Icon(Icons.attach_file_rounded,color: Colors.black54,))
@@ -145,12 +170,12 @@ class chatscreenstate extends State<ChatScreen>{
               SizedBox(width: 10,),
               InkWell(
                 onTap: (){
-                  return;
+                  // firestore.collection("/1234567890").doc("Zx5d4ejP6eAJJJmxLhIh").set(data)
                 },
                 child: CircleAvatar(
                   backgroundColor: Colors.black87,
                   // foregroundImage: NetworkImage(""),
-                  child: Icon(Icons.arrow_forward_ios_rounded,color: Colors.white,),
+                  child: Icon(Icons.send_rounded,color: Colors.white,),
                 ),
               ),
             ],

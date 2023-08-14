@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../globalfunction.dart';
 import '../cubit/edit_photo_cubit.dart';
 import 'base_photo.dart';
 
@@ -32,12 +33,38 @@ class EditPhotoView extends StatelessWidget {
 
 class EditLayer extends StatelessWidget {
   const EditLayer({Key? key}) : super(key: key);
-
+  // EditPhotoCubit epc;
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<EditPhotoCubit, EditPhotoState>(
+    return StreamBuilder<bool>(
+      stream: datacontroller.stream,
+      builder: (context, snapshot) {
+        return Stack(
+          fit: StackFit.expand,
+          children: [
+            Container(
+              height: MediaQuery.of(context).size.height,
+              width: MediaQuery.of(context).size.width,
+              decoration: BoxDecoration(
+                color: Colors.black.withOpacity(0.9),
+              ),
+            ),
+
+            /// widgets
+            for (var i = 0; i < Listwidgets.length; i++)
+              Align(
+                key: UniqueKey(),
+                alignment: Alignment.center,
+                child: Listwidgets[i],
+              ),
+          ],
+        );
+      }
+    )
+      /* BlocBuilder<EditPhotoCubit, EditPhotoState>(
       buildWhen: (p, c) {
-        final changeOnWidgets = p.widgets.length != c.widgets.length;
+        epc.state.Listwidgets;
+        final changeOnWidgets = p.Listwidgets.length != c.Listwidgets.length;
         final editedWidget = p.widgetState != c.widgetState;
         final editedLayer = p.layerOpacity != c.layerOpacity;
         return changeOnWidgets || editedWidget || editedLayer;
@@ -55,15 +82,15 @@ class EditLayer extends StatelessWidget {
             ),
 
             /// widgets
-            for (var i = 0; i < state.widgets.length; i++)
+            for (var i = 0; i < state.Listwidgets.length; i++)
               Align(
                 key: UniqueKey(),
                 alignment: Alignment.center,
-                child: state.widgets[i],
+                child: state.Listwidgets[i],
               ),
           ],
         );
       },
-    );
+    )*/;
   }
 }

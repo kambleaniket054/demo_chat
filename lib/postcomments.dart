@@ -1,7 +1,9 @@
 import 'dart:async';
+import 'dart:collection';
 
 import 'package:demo_chat/custom/ResumableState.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'Model/commentModel.dart';
@@ -17,7 +19,7 @@ class postcomments extends StatefulWidget{
   createState() => postcommentsstate();
 }
 
-class postcommentsstate extends  ResumableState<postcomments>{
+class postcommentsstate extends State<postcomments> with AutomaticKeepAliveClientMixin<postcomments>{
   late Datum data1;
   late String id;
   final vm_post _vmpost = vm_post();
@@ -33,12 +35,19 @@ class postcommentsstate extends  ResumableState<postcomments>{
   @override
   onReady(){
     getcommentslist(id,commentstreams,data1);
+    // getcommentslist(id,commentstreams,data1);
   }
 
 
   getcommentslist(String id, StreamController<bool> commentstreams, Datum data1) async {
     if (data1.commentlist == null) {
-     /* var data =  await*/ _vmpost.getcommentslist(id,data1,commentstreams);
+      Map<String,dynamic> commenmap = HashMap();
+      commenmap["id"] = id;
+      commenmap['commentStream'] = commentstreams;
+      commenmap['data1'] = data1;
+      await compute(_vmpost.getcommentslist,commenmap) ;
+      // print(commentdata);
+     // /* var data =  await*/ _vmpost.getcommentslist(commenmap);
       // data1.commentlist = data ?? [];
     }
     // commentstreams.add(true);
@@ -50,14 +59,14 @@ class postcommentsstate extends  ResumableState<postcomments>{
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
-          padding: const EdgeInsets   .only(left: 16,top: 5,right: 16),
+          padding: const EdgeInsets.only(left: 16,top: 5,right: 16),
           child: createTextThemeWise("Comments", TextStyle(color: Colors.grey)),
         ),
 
         StreamBuilder<bool>(
           // future: getcommentslist(id),
             stream: commentstreams.stream,
-            initialData:false,
+            initialData:true,
             builder: (context,snapshoot){
               CommentModel? data;
               if (snapshoot.data == true) {
@@ -103,5 +112,9 @@ class postcommentsstate extends  ResumableState<postcomments>{
       ],
     );
   }
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 
 }

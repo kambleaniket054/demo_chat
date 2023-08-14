@@ -55,12 +55,14 @@ dev_dependencies:
 #  firebase_auth: any
   firebase_core: 0.7.0
   firebase_auth: 0.20.1
+  cloud_firestore: any
   path_provider: 1.6.28
   google_sign_in: 4.5.9
   cached_network_image: any
   flutter_svg: any
   video_player: any
   image_picker: any
+  chewie: any
 #  flutter_sticker: ^0.2.0
 #  sticker_view: ^0.0.2
   flutter_ffmpeg: ^0.4.1
@@ -69,6 +71,7 @@ dev_dependencies:
   provider: any
   screenshot: 0.3.0
   flutter_bloc: any
+  chat_bubbles: any
 #  flutter_bloc: ^8.0.1
 #  get_it: ^7.2.0
 #  google_fonts: ^2.3.1
@@ -121,6 +124,7 @@ flutter:
     - assets/black_glasses.png
     - assets/native_face.png
     - assets/google.svg
+    - assets/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

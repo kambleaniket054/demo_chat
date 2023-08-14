@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../globalfunction.dart';
 import '../cubit/edit_photo_cubit.dart';
 
 class BasePhoto extends StatelessWidget {
@@ -12,15 +15,15 @@ class BasePhoto extends StatelessWidget {
     return Container(
       color: Colors.blueGrey[100],
       width: MediaQuery.of(context).size.width,
-      child: Image(
-        image: NetworkImage(""),
+      child: Image.file(File(pickedFile.path),
+        // image: Image.file("assets/earth.jpg"),
         fit: BoxFit.cover,
-        loadingBuilder: (context, child, loadingProgress) {
+        /*loadingBuilder: (context, child, loadingProgress) {
           if (loadingProgress == null) {
             return child;
           }
           return Image(
-            image: NetworkImage(""),
+            image: const AssetImage("assets/earth.jpg"),
             fit: BoxFit.cover,
             loadingBuilder: (context, child, loadingProgress) {
               if (loadingProgress == null) {
@@ -44,7 +47,7 @@ class BasePhoto extends StatelessWidget {
               );
             },
           );
-        },
+        },*/
         errorBuilder: (_, __, ___) {
           return const Center(
             child: Icon(
