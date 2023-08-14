@@ -24,6 +24,7 @@ class messagesState extends State<messages>{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       appBar: AppBar(
         elevation: 0  ,
         backgroundColor: Colors.white,
@@ -37,6 +38,10 @@ class messagesState extends State<messages>{
         children: [
           messagesListview(),
         ],
+      ),
+      floatingActionButton: FloatingActionButton(onPressed: () {  },
+        backgroundColor: Colors.black87,
+        child: Icon(Icons.add_rounded,color: Colors.white,),
       ),
     );
   }

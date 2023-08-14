@@ -63,6 +63,7 @@ dev_dependencies:
   video_player: any
   image_picker: any
   chewie: any
+  story_view: any
 #  flutter_sticker: ^0.2.0
 #  sticker_view: ^0.0.2
   flutter_ffmpeg: ^0.4.1

@@ -7,6 +7,7 @@ import 'package:demo_chat/Vm/vm_post.dart';
 import 'package:demo_chat/arfilterscreen.dart';
 import 'package:demo_chat/globalfunction.dart';
 import 'package:demo_chat/postcomments.dart';
+import 'package:demo_chat/storyview.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
@@ -142,17 +143,22 @@ StreamController<bool> commentstreams = StreamController<bool>.broadcast();
                 itemBuilder:(context,index){
                   Datum data1;
                   data1 = postdata1[index];
-                      return Container(
-                       // margin: const EdgeInsets.only(left:0,right: 10,top: 10,bottom: 10),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(30),
-                          //color:color.elementAt(index),
-                        ),
-                        padding: const EdgeInsets.all(6),
-                        child:  CircleAvatar(
-                          backgroundColor: Colors.orange,
-                            radius:38,
+                      return InkWell(
+                        onTap: (){
+                          Navigator.push(context, MaterialPageRoute(builder: (context)=>storyview()));
+                        },
+                        child: Container(
+                         // margin: const EdgeInsets.only(left:0,right: 10,top: 10,bottom: 10),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(30),
+                            //color:color.elementAt(index),
+                          ),
+                          padding: const EdgeInsets.all(6),
+                          child:  CircleAvatar(
+                            backgroundColor: Colors.orange,
+                              radius:38,
                   backgroundImage:NetworkImage(data1.owner.picture))
+                        ),
                       );
                 },
               );
