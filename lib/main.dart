@@ -68,9 +68,12 @@ class _MyHomePageState extends State<MyHomePage> {
         closelogin();
         return Future.value(true);
       },
-      child: MaterialApp(
-        navigatorKey: _mainnavigationkey,
-        home:loginscreen(),
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        body: MaterialApp(
+          navigatorKey: _mainnavigationkey,
+          home:loginscreen(),
+        ),
       ),
     );
   }

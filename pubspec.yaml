@@ -85,6 +85,7 @@ dev_dependencies:
   share_plus: any
   shared_preferences: any
   equatable: any
+  photo_manager: 2.0.0
 #  shimmer: ^2.0.0
 #  video_player: ^2.3.0
 #  flutter_stickers: any

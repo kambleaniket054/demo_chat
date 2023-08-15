@@ -21,7 +21,7 @@ import 'edit_photo/view/edit_photo_view.dart';
 class homescreen extends StatefulWidget{
   createState()=> homescreenstate();
 }
-class homescreenstate extends ResumableState<homescreen> with AutomaticKeepAliveClientMixin{
+class homescreenstate extends ResumableState<homescreen> with AutomaticKeepAliveClientMixin<homescreen>{
 
   List<String> names = ["home","library","search","person"];
   int index=0;
@@ -45,6 +45,7 @@ class homescreenstate extends ResumableState<homescreen> with AutomaticKeepAlive
 
     return Scaffold(
      // primary: true,
+      resizeToAvoidBottomInset: true,
       body:getBottomScreen(), /*Navigator(
         key: navigationkey,
         onGenerateRoute: (RouteSettings setting){

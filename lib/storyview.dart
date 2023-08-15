@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:story_view/story_view.dart';
 
 class storyview extends StatelessWidget {
@@ -117,11 +118,29 @@ class _MoreStoriesState extends State<MoreStories> {
   }
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    WidgetsBinding.instance?.addPostFrameCallback((_) {
+      SystemChrome.setSystemUIOverlayStyle(
+           SystemUiOverlayStyle(
+            statusBarColor: Colors.black87,
+            statusBarBrightness: Brightness.dark,
+            statusBarIconBrightness: Brightness.light,
+            systemNavigationBarColor: Colors.black87,
+            systemNavigationBarDividerColor: Colors.black87,
+            systemNavigationBarIconBrightness: Brightness.light,
+          ));
+    });
+  }
+
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("More"),
-      ),
+      // appBar: AppBar(
+      //   title: Text("More"),
+      // ),
       body: StoryView(
        [
           StoryItem.text(

@@ -4,6 +4,7 @@ import 'dart:ui';
 
 import 'package:demo_chat/Homescreen.dart';
 import 'package:demo_chat/globalfunction.dart';
+import 'package:demo_chat/userdetails.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -166,6 +167,19 @@ class loginscreenState  extends State<loginscreen>{
                            if(credential ==null){
                              return;
                            }
+                            usredetails = credential.user;
+
+                           var ref = FirebaseDatabase.instance.reference().child("Userdetails").child(usredetails.uid);
+                           // userdetails = credential.user;
+                           await ref.update({
+                             'username':usredetails.displayName,
+                             'creationdate' : usredetails.metadata.creationTime.toString(),
+                             'photourl': usredetails.photoURL,
+                             'followers':0,
+                             'following':0,
+                             'email':usredetails.email,
+                             "phonenumber":usredetails.phoneNumber
+                           },);
                            Navigator.pushReplacement(mainnavigationkey.currentContext!,MaterialPageRoute (builder: (BuildContext context) =>  homescreen()));
                          } on FirebaseAuthException catch (e) {
                            if (e.code == 'user-not-found') {
@@ -287,6 +301,7 @@ class loginscreenState  extends State<loginscreen>{
 
 }
 */
+import 'package:demo_chat/userdetails.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
 import 'dart:ui';
@@ -319,6 +334,7 @@ class loginscreen extends StatelessWidget {
       if(credential ==null){
         return;
       }
+      usredetails = credential.user;
       Navigator.pushReplacement(mainnavigationkey.currentContext!,MaterialPageRoute (builder: (BuildContext context) =>  homescreen()));
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {

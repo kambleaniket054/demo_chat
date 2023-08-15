@@ -145,7 +145,7 @@ StreamController<bool> commentstreams = StreamController<bool>.broadcast();
                   data1 = postdata1[index];
                       return InkWell(
                         onTap: (){
-                          Navigator.push(context, MaterialPageRoute(builder: (context)=>storyview()));
+                          Navigator.push(context, MaterialPageRoute(builder: (context)=>MoreStories()));
                         },
                         child: Container(
                          // margin: const EdgeInsets.only(left:0,right: 10,top: 10,bottom: 10),

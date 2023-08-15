@@ -2,8 +2,7 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-
-import 'package:provider/provider.dart';
+import 'package:photo_manager/photo_manager.dart';
 
 import '../globalfunction.dart';
 import 'edit_photo_page.dart';
@@ -19,6 +18,8 @@ class fetchimageviewState extends State<fetchimageview> {
   Uint8List? _file;
   bool isLoading = false;
   final TextEditingController _descriptionController = TextEditingController();
+
+
 
   _selectImage(BuildContext parentContext) async {
     return showDialog(
@@ -111,6 +112,13 @@ class fetchimageviewState extends State<fetchimageview> {
   void dispose() {
     super.dispose();
     _descriptionController.dispose();
+  }
+
+  @override
+  void  State() {
+    // TODO: implement initState
+    super.initState();
+    fetchinmages();
   }
 
   @override
@@ -212,6 +220,21 @@ class fetchimageviewState extends State<fetchimageview> {
     return pickedFile.readAsBytes();
 
     // Navigator.push(context, MaterialPageRoute(builder: (context)=> EditPhotoPage()));
+  }
+
+  void fetchinmages()async {
+    final albums = await PhotoManager.getAssetPathList(onlyAll: true);
+    final recentAlbum = albums.first;
+
+    // Now that we got the album, fetch all the assets it contains
+    final recentAssets = await recentAlbum.getAssetListRange(
+      start: 0, // start at index 0
+      end: 1000000, // end at a very big index (to get all the assets)
+    );
+
+    // Update the state and notify UI
+    setState(() {});
+
   }
 }
 
