@@ -226,3 +226,131 @@
 //     );*/
 //
 // }
+
+import 'dart:convert';
+import 'dart:io';
+import 'package:demo_chat/Homepage.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:demo_chat/Model/userdetail.dart';
+import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'Homescreen.dart';
+import 'globalfunction.dart';
+
+class photoeditscreen extends StatelessWidget{
+  File file;
+  photoeditscreen(this.file);
+ TextEditingController _descriptionController = TextEditingController();
+
+ @override
+  Widget build(BuildContext context) {
+
+    return  Scaffold(
+      extendBody: false,
+      appBar: AppBar(
+    backgroundColor:Colors.white,
+    elevation: 0.0,
+    foregroundColor: Colors.black87,
+    leading: IconButton(
+    icon: const Icon(Icons.arrow_back), onPressed: () {
+      Navigator.pop(context);
+    },
+   // onPressed: clearImage,
+   ),
+   title: const Text(
+   'Post to',
+   ),
+   centerTitle: false,
+        actions: [
+          TextButton(onPressed: ()async{
+            showDialog(context: context,builder: (context){
+              return Center(child: CircularProgressIndicator(),);
+            }
+            );
+            // required this.id,
+            // required this.image,
+            // required this.likes,
+            // required this.tags,
+            // required this.text,
+            // required this.publishDate,
+            // required this.owner,
+            // this.commentlist,
+            List<int> imageBytes = await file.readAsBytes();
+            var img =  base64Encode(imageBytes);
+            Map<String, dynamic> submap = {
+              "id": usredetails.uid.toString(),
+              "publishDate":Timestamp.now(),
+              "image":img,
+              "likes":'0',
+              "tags":[""],
+              "text":'new post',
+              "owner":usredetails.displayName ?? "USER",
+            };
+
+            // Map<String, dynamic> messagedata = {submap};
+            // FieldValue.arrayUnion(["greater_virginia"]
+            FirebaseFirestore.instance.collection("12345678").doc().set(submap).then((value){
+              print("success");
+              Navigator.pushAndRemoveUntil(context,MaterialPageRoute(builder: (context)=>homescreen()),(Routes){
+                return false;
+              });
+              // Navigator.pop(context);
+              // Navigator.pop(context);
+
+              // Messagecontroller.clear();
+            }).onError((error, stackTrace){
+              print(error.toString());
+              Navigator.pop(context);
+            });
+          }, child: Text("Submit",style: TextStyle(color: Colors.blue,fontSize: 18),)),
+        ],
+   ),
+      body: Column(
+        children: <Widget>[
+          // const Padding(padding: EdgeInsets.only(top: 10.0)),
+          const Divider(),
+          Container(
+            margin: EdgeInsets.only(top: 12),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                CircleAvatar(
+                  backgroundImage: NetworkImage("",
+                    // userdetail.profileimage,
+                  ),
+                ),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.3,
+                  child: TextField(
+                    controller: _descriptionController,
+                    decoration: const InputDecoration(
+                        hintText: "Write a caption...",
+                        border: InputBorder.none),
+                    maxLines: 8,
+                  ),
+                ),
+                SizedBox(
+                  height: 45.0,
+                  width: 45.0,
+                  child: AspectRatio(
+                    aspectRatio: 487 / 451,
+                    child: Container(
+                      decoration: BoxDecoration(
+                          image: DecorationImage(
+                            fit: BoxFit.fill,
+                            alignment: FractionalOffset.topCenter,
+                            image: MemoryImage(file.readAsBytesSync()),
+                          )),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const Divider(),
+        ],
+      ),
+    );
+  }
+}

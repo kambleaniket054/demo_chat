@@ -146,7 +146,8 @@ class homescreenstate extends ResumableState<homescreen> with AutomaticKeepAlive
                   }
                   else {
 
-                    // pushScreenname(mainnavigationkey.currentContext!,arfilterscreen());
+                    pushScreenname(mainnavigationkey.currentContext!,fetchimageview());
+                    return;
                   }
                   pageController.animateToPage(index, duration: Duration(microseconds: 1), curve: Curves.ease);
                  // navigationkey.currentState?.pushReplacementNamed(names[index]);
@@ -185,8 +186,8 @@ class homescreenstate extends ResumableState<homescreen> with AutomaticKeepAlive
         return homepage();
       case 1:
         return reelview();
-      case 2:
-        return fetchimageview();
+    /*  case 2:
+        return fetchimageview();*/
       case 3:
         return searchpage();
       case 4:

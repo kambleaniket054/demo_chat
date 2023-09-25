@@ -328,7 +328,7 @@ class loginscreen extends StatelessWidget {
   Future<void> signUserIn() async {
     try {
       final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email:usernameController.text,
+        email:usernameController.text.trim(),
         password: passwordController.text,
       );
       if(credential ==null){

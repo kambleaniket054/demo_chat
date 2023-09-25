@@ -99,7 +99,7 @@ class messagesState extends State<messages> with AutomaticKeepAliveClientMixin<m
       stream: chatslistcontroller.stream,
       builder: (context, snapshot) {
         if(snapshot.data == false && snapshot.connectionState == ConnectionState.waiting){
-          return Center(child: const CircularProgressIndicator(),);
+          return const Center(child: CircularProgressIndicator(),);
         }
         return ListView.separated(
             itemCount: data.length,
@@ -138,10 +138,18 @@ class messagetile extends StatefulWidget{
 }
 
 class _messagetileState extends State<messagetile> with AutomaticKeepAliveClientMixin<messagetile> {
+  var messagefirebasestream;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    messagefirebasestream =  FirebaseFirestore.instance.collection("1234567890").doc(widget.messagelist[widget.listindex].toString()).snapshots();
+  }
+
   @override
   Widget build(BuildContext context) {
    return StreamBuilder<DocumentSnapshot>(
-         stream: FirebaseFirestore.instance.collection("1234567890").doc(widget.messagelist[widget.listindex].toString()).snapshots(),
+         stream:messagefirebasestream/* FirebaseFirestore.instance.collection("1234567890").doc(widget.messagelist[widget.listindex].toString()).snapshots()*/,
          builder: (context, snapshot) {
            if(snapshot.connectionState == ConnectionState.waiting){
              return Shimmer.fromColors(child: Container(),  baseColor: Colors.grey.shade300,
@@ -167,10 +175,10 @@ class _messagetileState extends State<messagetile> with AutomaticKeepAliveClient
                  mainAxisAlignment: MainAxisAlignment.start,
                  children: [
                   FutureBuilder<userdetail>(
-                    initialData: userdetail(name: "",createddate: "",username: ""),
+                    initialData: user.createddate == "" ? userdetail(name: "",createddate: "",username: ""):user,
                       future: getusername(memberid),
                       builder: (context,snapshot){
-                        if(snapshot.connectionState == ConnectionState.waiting){
+                        if(snapshot.connectionState == ConnectionState.waiting && user.createddate != ""){
                           return Shimmer.fromColors(child: Container(), baseColor: Colors.white, highlightColor: Colors.grey);
                         }
                         user = snapshot.data!;

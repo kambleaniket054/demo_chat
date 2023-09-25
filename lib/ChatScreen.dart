@@ -23,7 +23,7 @@ class ChatScreen extends StatefulWidget{
 class chatscreenstate extends State<ChatScreen> with AutomaticKeepAliveClientMixin<ChatScreen>{
   ScrollController listscrolcontrol = ScrollController();
   List snapdata = [];
-
+  var messagedata;
   TextEditingController Messagecontroller = TextEditingController();
   @override
   void initState() {
@@ -81,10 +81,10 @@ class chatscreenstate extends State<ChatScreen> with AutomaticKeepAliveClientMix
               // initialData:
               stream:FirebaseFirestore.instance.collection("1234567890").doc(widget.chatcode.toString()).snapshots(),
               builder: (context, snapshot) {
-               if (snapshot.connectionState == ConnectionState.waiting) {
+               if (snapshot.connectionState == ConnectionState.waiting && messagedata ==null) {
                  return const Center(child: CircularProgressIndicator());
                 }
-               var messagedata = snapshot.data?.data()['messages'];
+                messagedata = snapshot.data?.data()['messages'];
                if (snapshot.hasError || messagedata == null && snapshot.connectionState == ConnectionState.active) {
                  return  Center(child: Text('Something went wrong',style:GoogleFonts.roboto(fontSize: 18,color: Colors.black54),));
                }

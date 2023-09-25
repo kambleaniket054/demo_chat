@@ -180,6 +180,7 @@ class _MoreStoriesState extends State<MoreStories> {
         },
         onComplete: () {
           print("Completed a cycle");
+          Navigator.pop(context);
         },
         progressPosition: ProgressPosition.top,
         repeat: false,

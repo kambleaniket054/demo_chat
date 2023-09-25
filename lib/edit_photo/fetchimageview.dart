@@ -1,9 +1,13 @@
+import 'dart:async';
+import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:demo_chat/Colorcode.dart';
+import 'package:demo_chat/photoeditscreen.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:photo_manager/photo_manager.dart';
-
+import 'package:shimmer/shimmer.dart';
 import '../globalfunction.dart';
 import 'edit_photo_page.dart';
 
@@ -18,9 +22,11 @@ class fetchimageviewState extends State<fetchimageview> {
   Uint8List? _file;
   bool isLoading = false;
   final TextEditingController _descriptionController = TextEditingController();
-
-
-
+  late  List<AssetEntity> recentAssets = [];
+  var selectedimage;
+  List<AssetEntity> videolist = [];
+  List<AssetEntity> imagelist = [];
+StreamController filtercontroller = StreamController<String>();
   _selectImage(BuildContext parentContext) async {
     return showDialog(
       context: parentContext,
@@ -115,40 +121,38 @@ class fetchimageviewState extends State<fetchimageview> {
   }
 
   @override
-  void  State() {
+  void  initState() {
     // TODO: implement initState
     super.initState();
     fetchinmages();
   }
 
+  List<DropdownMenuItem<String>> droplist = [DropdownMenuItem(child: Center(child: Text("Images",style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold),)),value: "Images",),DropdownMenuItem(child: Center(child: Text("videos")),value: "videos",)];
+
   @override
   Widget build(BuildContext context) {
     // final UserProvider userProvider = Provider.of<UserProvider>(context);
 
-    return _file == null
-        ? Center(
-      child: IconButton(
-        icon: const Icon(
-          Icons.upload,
-        ),
-        onPressed: () => _selectImage(context),
-      ),
-    )
-        : Scaffold(
+    return Scaffold(
+      backgroundColor: Colorcode.backgroundcolor,
       appBar: AppBar(
-        // backgroundColor: ,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
+        backgroundColor:Colors.white,
+        elevation: 1,
+        foregroundColor: Colors.black87,
+        automaticallyImplyLeading: true,
+        /*leading: IconButton(
+          icon: const Icon(Icons.arrow_back,color: Colors.black87,),
           onPressed: clearImage,
-        ),
+        ),*/
         title: const Text(
           'Post to',
         ),
         centerTitle: false,
         actions: <Widget>[
           TextButton(
-            onPressed: (){
-
+            onPressed: ()async{
+              var imagedata = await selectedimage.file;
+              Navigator.push(context, MaterialPageRoute(builder: (context)=>photoeditscreen(imagedata!)));
     },/* postImage(
               userProvider.getUser.uid,
               userProvider.getUser.username,
@@ -167,7 +171,123 @@ class fetchimageviewState extends State<fetchimageview> {
       // POST FORM
       body: Column(
         children: <Widget>[
-          isLoading
+          SizedBox(height: 15,),
+          Expanded(child:selectedimage != null ? AssetEntityImage(
+            selectedimage,
+            fit: BoxFit.cover,
+            filterQuality: FilterQuality.high,
+            isOriginal: true, // Defaults to `true`.
+            thumbnailSize: const ThumbnailSize.square(200), // Preferred value.
+            thumbnailFormat: ThumbnailFormat.jpeg,
+            // loadingBuilder: (context,w,a){
+            //   return Shimmer.fromColors(child:Spacer(),  baseColor: Colors.grey.shade300,
+            //     highlightColor: Colors.grey.shade100,
+            //     enabled: true,);
+            // },// Defaults to `jpeg`.
+          ) : Center(child:Text("Select image",style: TextStyle(fontSize: 18,fontWeight: FontWeight.w600,color: Colors.black38),)),),
+          SizedBox(height: 15,),
+          recentAssets == [] ? const Center(
+            child: CircularProgressIndicator(),
+          ):Expanded(
+    child:StreamBuilder(
+      initialData: 'Images',
+      stream: filtercontroller.stream,
+      builder: (context, snapshot) {
+        if (snapshot.data == 'videos') {
+          recentAssets = videolist;
+        }
+        else{
+          recentAssets = imagelist;
+        }
+        return Container(
+          decoration: BoxDecoration(
+            color: Colorcode.foreground,
+            borderRadius: BorderRadius.only(topLeft: Radius.circular(12),topRight:Radius.circular(12) ),
+          ),
+          padding: EdgeInsets.only(top: 10,right: 8,left: 8),
+
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                height: 32,
+                width: 100,
+                decoration:BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  color: Colorcode.backgroundcolor,
+                ),
+                child: DropdownButton(
+                  alignment: Alignment.centerLeft,
+                  isExpanded: true,
+                  value: snapshot.data,
+                  underline: Container(),
+                  hint: Center(child: droplist.first),
+                  items:droplist, onChanged: (value) {
+                  filtercontroller.add(value);
+                },
+                ),
+              ),
+              SizedBox(height: 10,),
+              Flexible(
+                child: GridView.builder(
+                  shrinkWrap: true,
+                  scrollDirection: Axis.vertical,
+                  addAutomaticKeepAlives: true,
+                    // controller: widget.scrollCtr,
+                    itemCount: recentAssets.length,
+                    gridDelegate:
+                    SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 4,crossAxisSpacing: 1.5,mainAxisSpacing:1.5),
+                    itemBuilder: (BuildContext context, int index) {
+                      return FutureBuilder<File?>(
+                          future: recentAssets[index].file,
+                          builder: (context, snapshot) {
+                            if(snapshot.connectionState == ConnectionState.waiting){
+                              return Container(color: Colors.grey[100],);
+                            }
+                            if(snapshot.data == null){
+                              recentAssets.removeAt(index);
+
+                            }
+                            return InkWell(
+                                onTap: (){
+                                  selectedimage = recentAssets[index];
+                                  setState(() {
+
+                                  });
+                                },
+                                child: AssetEntityImage(
+                                  recentAssets[index],
+                                  fit: BoxFit.cover,
+                                  isOriginal: false, // Defaults to `true`.
+                                  thumbnailSize: const ThumbnailSize.square(200), // Preferred value.
+                                  thumbnailFormat: ThumbnailFormat.jpeg,
+                                  // loadingBuilder: (context,w,a){
+                                  //   return Shimmer.fromColors(child:Spacer(),  baseColor: Colors.grey.shade300,
+                                  //     highlightColor: Colors.grey.shade100,
+                                  //     enabled: true,);
+                                  // },// Defaults to `jpeg`.
+                                ),/*Image.file(snapshot.data!)*/);
+                          });
+                    }),
+              ),
+            ],
+          ),
+        );
+      }
+    ),/*ListView.builder(
+        itemCount:recentAssets.length,
+        itemBuilder: (context,index){
+      return FutureBuilder<File?>(
+          future: recentAssets[index].file,
+          builder: (context, snapshot) {
+            if(snapshot.connectionState == ConnectionState.waiting){
+              return Center(child: const CircularProgressIndicator());
+            }
+        return Image.file(snapshot.data!);
+      });
+    })*/
+    ),
+          /*isLoading
               ? const LinearProgressIndicator()
               : const Padding(padding: EdgeInsets.only(top: 0.0)),
           const Divider(),
@@ -207,7 +327,7 @@ class fetchimageviewState extends State<fetchimageview> {
               ),
             ],
           ),
-          const Divider(),
+          const Divider(),*/
         ],
       ),
     );
@@ -223,17 +343,36 @@ class fetchimageviewState extends State<fetchimageview> {
   }
 
   void fetchinmages()async {
-    final albums = await PhotoManager.getAssetPathList(onlyAll: true);
-    final recentAlbum = albums.first;
+    try {
+      // final PermissionState ps = await PhotoManager.requestPermissionExtend();
+      // if (ps.isAuth) {
+        final albums = await PhotoManager.getAssetPathList(hasAll: true);
+        final recentAlbum = albums.first;
 
-    // Now that we got the album, fetch all the assets it contains
-    final recentAssets = await recentAlbum.getAssetListRange(
-      start: 0, // start at index 0
-      end: 1000000, // end at a very big index (to get all the assets)
-    );
+        // Now that we got the album, fetch all the assets it contains
+        List<AssetEntity> albumres = await recentAlbum.getAssetListRange(
+          start: 0, // start at index 0
+          end: 1000000, // end at a very big index (to get all the assets)
+        );
 
-    // Update the state and notify UI
-    setState(() {});
+        albumres.forEach((element) {
+          if( element.type == AssetType.video){
+            videolist.add(element);
+          }
+          else{
+            imagelist.add(element);
+          }
+         });
+        // Update the state and notify UI
+        setState(() {});
+      // } else {
+        // Limited(iOS) or Rejected, use `==` for more precise judgements.
+        // You can call `PhotoManager.openSetting()` to open settings for further steps.
+      // }
+
+    } catch (e) {
+     print("photomanager error"+e.toString());
+    }
 
   }
 }

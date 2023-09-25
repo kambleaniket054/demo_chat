@@ -14,7 +14,7 @@ class vm_post{
 api_post _apipost = api_post();
   getpost({ String? url}) async {
     try {
-      var res = await _apipost.getpost('https://dummyapi.io/data/v1/post?limit=100');
+      var res = await _apipost.getpost('https://dummyapi.io/data/v1/post?limit=10');
       postdata1 = (res['data']).map((i) => Datum.fromJson(i)).toList();
          for(Datum data in postdata1){
            Map<String,dynamic> commentmap = HashMap();

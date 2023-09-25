@@ -40,7 +40,7 @@ class PostContent extends StatelessWidget{
                ).copyWith(right: 0),
                child:  Row(
                  children: [
-                   CachedNetworkImage(
+                  /* CachedNetworkImage(
                      imageUrl: data1.owner.picture,
                      useOldImageOnUrlChange:true,
                      imageBuilder: (context,im){
@@ -52,7 +52,11 @@ class PostContent extends StatelessWidget{
                      // progressIndicatorBuilder: (context, url, downloadProgress) =>
                      //     Center(child: CircularProgressIndicator(value: downloadProgress.progress,color: Colors.black38,backgroundColor: Colors.white54,)),
                      errorWidget: (context, url, error) => const Icon(Icons.error),
-                   ),
+                   ),*/
+                 CircleAvatar(
+                 radius:26,
+                 backgroundImage:NetworkImage(data1.owner.picture.toString()),
+               ),
                    /*CircleAvatar(
                              radius:16,
                              backgroundImage:NetworkImage(data1.owner.picture),
@@ -78,14 +82,14 @@ class PostContent extends StatelessWidget{
                      backgroundBlendMode: BlendMode.color
                  ),
                  //color:Colors.red,
-                 child: CachedNetworkImage(
+                 child: /*CachedNetworkImage(
                    imageUrl: data1.image,
                    useOldImageOnUrlChange:true,
                    // cacheManager: ,
                    progressIndicatorBuilder: (context, url, downloadProgress) =>
                        Center(child: CircularProgressIndicator(value: downloadProgress.progress,color: Colors.black38,backgroundColor: Colors.white54,)),
                    errorWidget: (context, url, error) => const Icon(Icons.error),
-                 )
+                 )*/Image.network(data1.image.toString()),
                // Image.network(data1.image,fit:BoxFit.cover,isAntiAlias:true,scale:1,filterQuality: FilterQuality.high),
              ),
            ],
