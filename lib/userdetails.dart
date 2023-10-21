@@ -1,8 +1,11 @@
+import 'package:demo_chat/profileBloc/porfilecontroller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'Model/instaPostmodel.dart';
 import 'globalfunction.dart';
+import 'profileBloc/profileEvent.dart';
+import 'profileBloc/profileState.dart';
 
 class userdetails extends StatefulWidget {
   @override
@@ -14,6 +17,16 @@ class userdetails extends StatefulWidget {
 class userdetailstate  extends State<userdetails>{
 
  bool data = true;
+ profilecontroller profilec = profilecontroller();
+ @override
+  void initState() 
+ {
+   profilec.add(fecthprofiledetails(uid:usredetails.uid));
+    // TODO: implement initState
+    super.initState();
+  }
+ 
+ 
   @override
   Widget build(BuildContext context) {
    return Scaffold(
