@@ -1,14 +1,10 @@
-import 'dart:convert';
-import 'dart:math';
 import 'package:chat_bubbles/chat_bubbles.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:demo_chat/Model/userdetail.dart';
 import 'package:demo_chat/globalfunction.dart';
-import 'package:demo_chat/userdetails.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:firebase_database/firebase_database.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'Colorcode.dart';
 
@@ -102,7 +98,7 @@ class chatscreenstate extends State<ChatScreen> with AutomaticKeepAliveClientMix
                     itemCount: messagedata?.length,
                     itemBuilder:(context,index){
                   bool fromuser = false;
-                  if( messagedata![index]['sender'] == usredetails.uid){
+                  if( messagedata[index]['sender'] == usredetails.uid){
                     fromuser = true;
                   }
                   return Container(
