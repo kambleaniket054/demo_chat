@@ -4,7 +4,7 @@ abstract class DragableWidgetChild {}
 
 class DragableWidgetTextChild extends DragableWidgetChild {
   DragableWidgetTextChild({
-    required this.text,
+    this.text,
     this.textAlign,
     this.textStyle,
     this.color = Colors.white,
@@ -14,21 +14,21 @@ class DragableWidgetTextChild extends DragableWidgetChild {
   });
 
   String text;
-  TextAlign? textAlign;
-  TextStyle? textStyle;
-  Color? color;
-  double? fontSize;
-  FontStyle? fontStyle;
-  FontWeight? fontWeight;
+  TextAlign textAlign;
+  TextStyle textStyle;
+  Color color;
+  double fontSize;
+  FontStyle fontStyle;
+  FontWeight fontWeight;
 
   DragableWidgetTextChild copyWith({
-    String? text,
-    TextAlign? textAlign,
-    TextStyle? textStyle,
-    Color? color,
-    double? fontSize,
-    FontStyle? fontStyle,
-    FontWeight? fontWeight,
+    String text,
+    TextAlign textAlign,
+    TextStyle textStyle,
+    Color color,
+    double fontSize,
+    FontStyle fontStyle,
+    FontWeight fontWeight,
   }) {
     return DragableWidgetTextChild(
       text: text ?? this.text,
@@ -44,9 +44,9 @@ class DragableWidgetTextChild extends DragableWidgetChild {
 
 class DragableWidget extends StatelessWidget {
   DragableWidget({
-    Key? key,
-    required this.child,
-    required this.uniqueKey,
+    Key key,
+     this.child,
+     this.uniqueKey,
     this.onTap,
     this.onLongPress,
     this.clickable = true,
@@ -55,8 +55,8 @@ class DragableWidget extends StatelessWidget {
 
   DragableWidgetChild child;
   final int uniqueKey;
-  final void Function(int, DragableWidgetChild)? onTap;
-  final void Function(int)? onLongPress;
+  final void Function(int, DragableWidgetChild) onTap;
+  final void Function(int) onLongPress;
   final bool clickable;
   final bool dragable;
 
@@ -82,12 +82,12 @@ class DragableWidget extends StatelessWidget {
         onTap: () {
           if (!clickable) return;
           if (onTap == null) return;
-          onTap!(uniqueKey, child);
+          onTap(uniqueKey, child);
         },
         onLongPress: () {
           if (!clickable) return;
           if (onLongPress == null) return;
-          onLongPress!(uniqueKey);
+          onLongPress(uniqueKey);
         },
         onPanUpdate: (details) {
           if (!dragable) return;

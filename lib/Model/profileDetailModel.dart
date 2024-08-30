@@ -18,13 +18,13 @@ class ProfileDetailModel {
   String username;
 
   ProfileDetailModel({
-    required this.chats,
-    required this.creationdate,
-    required this.email,
-    required this.followers,
-    required this.following,
-    required this.photourl,
-    required this.username,
+     this.chats,
+     this.creationdate,
+     this.email,
+     this.followers,
+     this.following,
+     this.photourl,
+     this.username,
   });
 
   factory ProfileDetailModel.fromJson(Map<String, dynamic> json) => ProfileDetailModel(

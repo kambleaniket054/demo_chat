@@ -12,7 +12,7 @@ class vm_post{
   StreamController<bool> postcontroller  = StreamController<bool>.broadcast();
     // var data;
 api_post _apipost = api_post();
-  getpost({ String? url}) async {
+  getpost({ String url}) async {
     try {
       var res = await _apipost.getpost('https://dummyapi.io/data/v1/post?limit=10');
       postdata1 = (res['data']).map((i) => Datum.fromJson(i)).toList();
@@ -30,7 +30,7 @@ api_post _apipost = api_post();
       print(e.toString());
     }
   }
-  getprofile({ String? id}) async {
+  getprofile({ String id}) async {
     //var res = "https://i.stack.imgur.com/l60Hf.png";
      var res = await _apipost.getprofile('https://dummyapi.io/data/v1/user?${id}');
      res ??= "https://i.stack.imgur.com/l60Hf.png";

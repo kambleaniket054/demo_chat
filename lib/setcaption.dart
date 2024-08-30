@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class setcaption extends StatelessWidget{
   final file;
-  setcaption(this.file, {Key? key}) : super(key: key);
+  setcaption(this.file, {Key key}) : super(key: key);
   final TextEditingController _descriptionController = TextEditingController();
   @override
   Widget build(BuildContext context) {
@@ -50,7 +50,7 @@ class setcaption extends StatelessWidget{
                         image: DecorationImage(
                           fit: BoxFit.fill,
                           alignment: FractionalOffset.topCenter,
-                          image: MemoryImage(file!),
+                          image: MemoryImage(file),
                         )),
                   ),
                 ),

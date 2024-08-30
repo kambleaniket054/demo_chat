@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:demo_chat/Messages.dart';
 import 'package:demo_chat/Model/commentModel.dart';
 import 'package:demo_chat/Model/instaPostmodel.dart';
@@ -361,7 +360,7 @@ Navigator.of(mainnavigationkey.currentContext!).push(PageRouteBuilder(
           stream: commentstreams.stream,
             initialData:data1.commentlist != null ? true : false,
             builder: (context,snapshoot){
-              CommentModel? data;
+              CommentModel data;
               if (snapshoot.data == true) {
                 data  =data1.commentlist;
                 // data1.commentlist = snapshoot.data as CommentModel?;
@@ -370,10 +369,10 @@ Navigator.of(mainnavigationkey.currentContext!).push(PageRouteBuilder(
           return data?.data != null ?Container(
             padding: const EdgeInsets.only(left: 16,top: 5,right: 16),
             child: Column(
-              children: List.generate(data!.data.length, (index) => Container(
+              children: List.generate(data.data.length, (index) => Container(
                 child: Row(
                   children: [
-                    Text(data!.data[index].owner.firstName +" "+ data.data[index].owner.lastName,style: const TextStyle(
+                    Text(data.data[index].owner.firstName +" "+ data.data[index].owner.lastName,style: const TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 14,
                     ),),

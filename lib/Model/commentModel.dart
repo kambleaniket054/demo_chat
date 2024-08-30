@@ -10,7 +10,7 @@ String commentModelToJson(CommentModel data) => json.encode(data.toJson());
 
 class CommentModel {
   CommentModel({
-    required this.data,
+     this.data,
   });
 
   List<commentsDetails> data;
@@ -28,9 +28,9 @@ class commentsDetails {
   commentsDetails({
      this.id = '',
      this.message = '',
-     required this.owner,
+      this.owner,
      this.post = '',
-     required this.publishDate ,
+      this.publishDate ,
   });
 
   String id;
@@ -58,11 +58,11 @@ class commentsDetails {
 
 class Owner {
   Owner({
-    required this.id,
-    required this.title,
-    required this.firstName,
-    required this.lastName,
-    required this.picture,
+     this.id,
+     this.title,
+     this.firstName,
+     this.lastName,
+     this.picture,
   });
 
   String id;

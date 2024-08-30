@@ -12,17 +12,17 @@ import '../globalfunction.dart';
 import 'edit_photo_page.dart';
 
 class fetchimageview extends StatefulWidget {
-  const fetchimageview({Key? key}) : super(key: key);
+  const fetchimageview({Key key}) : super(key: key);
 
   @override
   fetchimageviewState createState() => fetchimageviewState();
 }
 
 class fetchimageviewState extends State<fetchimageview> {
-  Uint8List? _file;
+  Uint8List _file;
   bool isLoading = false;
   final TextEditingController _descriptionController = TextEditingController();
-  late  List<AssetEntity> recentAssets = [];
+    List<AssetEntity> recentAssets = [];
   var selectedimage;
   List<AssetEntity> videolist = [];
   List<AssetEntity> imagelist = [];
@@ -152,7 +152,7 @@ StreamController filtercontroller = StreamController<String>();
           TextButton(
             onPressed: ()async{
               var imagedata = await selectedimage.file;
-              Navigator.push(context, MaterialPageRoute(builder: (context)=>photoeditscreen(imagedata!)));
+              Navigator.push(context, MaterialPageRoute(builder: (context)=>photoeditscreen(imagedata)));
     },/* postImage(
               userProvider.getUser.uid,
               userProvider.getUser.username,
@@ -238,7 +238,7 @@ StreamController filtercontroller = StreamController<String>();
                     gridDelegate:
                     SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 4,crossAxisSpacing: 1.5,mainAxisSpacing:1.5),
                     itemBuilder: (BuildContext context, int index) {
-                      return FutureBuilder<File?>(
+                      return FutureBuilder<File>(
                           future: recentAssets[index].file,
                           builder: (context, snapshot) {
                             if(snapshot.connectionState == ConnectionState.waiting){

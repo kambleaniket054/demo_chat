@@ -181,7 +181,7 @@ class _messagetileState extends State<messagetile> with AutomaticKeepAliveClient
                         if(snapshot.connectionState == ConnectionState.waiting && user.createddate != ""){
                           return Shimmer.fromColors(child: Container(), baseColor: Colors.white, highlightColor: Colors.grey);
                         }
-                        user = snapshot.data!;
+                        user = snapshot.data;
                         return Row(
                           children: [
                             CircleAvatar(
@@ -195,7 +195,7 @@ class _messagetileState extends State<messagetile> with AutomaticKeepAliveClient
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  createTextThemeWise(snapshot.data!.name.toString(),const TextStyle(
+                                  createTextThemeWise(snapshot.data.name.toString(),const TextStyle(
                                     fontSize: 16,
                                     color: Colors.black87,
                                   )),

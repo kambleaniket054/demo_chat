@@ -335,7 +335,7 @@ class loginscreen extends StatelessWidget {
         return;
       }
       usredetails = credential.user;
-      Navigator.pushReplacement(mainnavigationkey.currentContext!,MaterialPageRoute (builder: (BuildContext context) =>  homescreen()));
+      Navigator.pushReplacement(mainnavigationkey.currentContext,MaterialPageRoute (builder: (BuildContext context) =>  homescreen()));
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         print('No user found for that email.');
@@ -554,7 +554,7 @@ class loginscreen extends StatelessWidget {
   
 }
 
-SquareTile({required String imagePath}) {
+SquareTile({ String imagePath}) {
   return Container(
     padding: EdgeInsets.all(20),
     decoration: BoxDecoration(
@@ -570,7 +570,7 @@ SquareTile({required String imagePath}) {
   );
 }
 
-MyTextField({required TextEditingController controller, required String hintText, required bool obscureText}) {
+MyTextField({ TextEditingController controller,  String hintText,  bool obscureText}) {
   return Padding(
     padding: const EdgeInsets.symmetric(horizontal: 25.0),
     child: TextField(
@@ -591,7 +591,7 @@ MyTextField({required TextEditingController controller, required String hintText
   );
 }
 
-Widget MyButton({void Function()? onTap}) {
+Widget MyButton({void Function() onTap}) {
   return GestureDetector(
     onTap: onTap,
     child: Container(

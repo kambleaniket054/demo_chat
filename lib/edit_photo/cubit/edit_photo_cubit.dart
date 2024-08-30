@@ -112,8 +112,8 @@ class EditPhotoCubit extends Cubit<EditPhotoState> {
     }
   }
 
-  Future<Directory?> _getDirectory() async {
-    Directory? directory;
+  Future<Directory> _getDirectory() async {
+    Directory directory;
 
     // if (Platform.isAndroid) {
     //   var storage = await Permission.storage.isGranted;
@@ -158,7 +158,7 @@ class EditPhotoCubit extends Cubit<EditPhotoState> {
     //   directory = await getTemporaryDirectory();
     // }
 
-    if (!await directory!.exists()) {
+    if (!await directory.exists()) {
       directory.create(recursive: true);
     }
 

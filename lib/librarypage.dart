@@ -12,9 +12,9 @@ class librarypage extends StatefulWidget{
   createState()=>librarypagestate();
 }
 class librarypagestate extends State<librarypage>{
-  late VideoPlayerController _controller;
-  late Future<void> _initializeVideoPlayerFuture;
-  ChewieController? _chewieController;
+   VideoPlayerController _controller;
+   Future<void> _initializeVideoPlayerFuture;
+  ChewieController _chewieController;
   @override
   void initState() {
     // TODO: implement initState
@@ -49,7 +49,7 @@ class librarypagestate extends State<librarypage>{
     // TODO: implement dispose
     super.dispose();
     _controller.dispose();
-    _chewieController!.dispose();
+    _chewieController.dispose();
   }
   Future initializePlayer() async {
     _controller = VideoPlayerController.network('https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4');
@@ -94,7 +94,7 @@ class librarypagestate extends State<librarypage>{
        fit: StackFit.expand,
        children: [
          _chewieController != null &&
-             _chewieController!.videoPlayerController.value.isInitialized
+             _chewieController.videoPlayerController.value.isInitialized
              ? GestureDetector(
            onDoubleTap: () {
              // setState(() {
@@ -102,7 +102,7 @@ class librarypagestate extends State<librarypage>{
              // });
            },
            child: Chewie(
-             controller: _chewieController!,
+             controller: _chewieController,
            ),
          )
              : Column(

@@ -8,5 +8,5 @@ class userdetail{
   var profileimage;
   String username = "";
   String createddate = "";
-  userdetail({required this.name, required this.createddate, this.profileimage, required this.username});
+  userdetail({ this.name,  this.createddate, this.profileimage,  this.username});
 }

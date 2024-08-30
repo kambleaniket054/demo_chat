@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import '../../widget/dragable_widget.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-Future<T?> addText<T>(
+Future<T> addText<T>(
   BuildContext context, [
-  DragableWidgetTextChild? text,
+  DragableWidgetTextChild text,
 ]) async {
   return showDialog(
     context: context,
@@ -17,16 +17,16 @@ Future<T?> addText<T>(
 }
 
 class AddTextPage extends StatefulWidget {
-  AddTextPage({Key? key, this.text}) : super(key: key);
-  DragableWidgetTextChild? text;
+  AddTextPage({Key key, this.text}) : super(key: key);
+  DragableWidgetTextChild text;
 
   @override
   State<AddTextPage> createState() => _AddTextPageState();
 }
 
 class _AddTextPageState extends State<AddTextPage> {
-  late TextEditingController _textController;
-  late ValueNotifier<DragableWidgetTextChild> _valueListener;
+   TextEditingController _textController;
+   ValueNotifier<DragableWidgetTextChild> _valueListener;
 
   final colors = [
     Colors.black,
@@ -132,7 +132,7 @@ class _AddTextPageState extends State<AddTextPage> {
               },
               child: Text(
                 "Done",
-                style:Theme.of(context).primaryTextTheme.bodyText2!, /*ThemeApplication.h3.copyWith(
+                style:Theme.of(context).primaryTextTheme.bodyText2, /*ThemeApplication.h3.copyWith(
                   color: Colors.white,
                 ),*/
               ),

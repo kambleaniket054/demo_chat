@@ -20,8 +20,8 @@ class postcomments extends StatefulWidget{
 }
 
 class postcommentsstate extends State<postcomments> with AutomaticKeepAliveClientMixin<postcomments>{
-  late Datum data1;
-  late String id;
+   Datum data1;
+   String id;
   final vm_post _vmpost = vm_post();
   StreamController<bool> commentstreams = StreamController.broadcast();
    @override
@@ -68,7 +68,7 @@ class postcommentsstate extends State<postcomments> with AutomaticKeepAliveClien
             stream: commentstreams.stream,
             initialData:true,
             builder: (context,snapshoot){
-              CommentModel? data;
+              CommentModel data;
               if (snapshoot.data == true) {
                 data  =data1.commentlist;
                 print(data?.data.length);
@@ -77,10 +77,10 @@ class postcommentsstate extends State<postcomments> with AutomaticKeepAliveClien
               return snapshoot.data == true ? Container(
                 padding: const EdgeInsets.only(left: 16,top: 5,right: 16),
                 child: Column(
-                  children: List.generate(data!.data.length, (index) => Container(
+                  children: List.generate(data.data.length, (index) => Container(
                       child: Row(
                         children: [
-                          Text(data!.data[index].owner.firstName +" "+ data.data[index].owner.lastName,style: const TextStyle(
+                          Text(data.data[index].owner.firstName +" "+ data.data[index].owner.lastName,style: const TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 14,
                           ),),

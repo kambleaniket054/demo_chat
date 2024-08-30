@@ -6,7 +6,7 @@ enum LayerState { idle, editing }
 
 class EditPhotoState extends Equatable {
   const EditPhotoState({
-    required this.photo,
+     this.photo,
     this.layerState = LayerState.idle,
     this.layerOpacity = 0,
     this.widgetState = WidgetState.idle,
@@ -24,12 +24,12 @@ class EditPhotoState extends Equatable {
   final StatusDownload statusShare;
 
   EditPhotoState copyWith({
-    LayerState? layerState,
-    double? layerOpacity,
-    WidgetState? widgetState,
-    List<DragableWidget>? widgets,
-    StatusDownload? statusDownload,
-    StatusDownload? statusShare,
+    LayerState layerState,
+    double layerOpacity,
+    WidgetState widgetState,
+    List<DragableWidget> widgets,
+    StatusDownload statusDownload,
+    StatusDownload statusShare,
   }) {
     return EditPhotoState(
       photo: photo,

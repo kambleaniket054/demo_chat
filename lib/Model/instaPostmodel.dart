@@ -12,10 +12,10 @@ String instaPostmodelToJson(InstaPostmodel data) => json.encode(data.toJson());
 
 class InstaPostmodel {
   InstaPostmodel({
-    required this.data,
-    required this.total,
-    required this.page,
-    required this.limit,
+     this.data,
+     this.total,
+     this.page,
+     this.limit,
   });
 
   List<Datum> data;
@@ -42,13 +42,13 @@ class Datum {
 
 
   Datum({
-    required this.id,
-    required this.image,
-    required this.likes,
-    required this.tags,
-    required this.text,
-    required this.publishDate,
-    required this.owner,
+     this.id,
+     this.image,
+     this.likes,
+     this.tags,
+     this.text,
+     this.publishDate,
+     this.owner,
     this.commentlist,
   });
 
@@ -84,22 +84,22 @@ class Datum {
 
 class Owner {
   Owner({
-    required this.id,
-    required this.title,
-    required this.firstName,
-    required this.lastName,
-    required this.picture,
+     this.id,
+     this.title,
+     this.firstName,
+     this.lastName,
+     this.picture,
   });
 
   String id;
-  Title? title;
+  Title title;
   String firstName;
   String lastName;
   String picture;
 
   factory Owner.fromJson(Map<String, dynamic> json) => Owner(
     id: json["id"],
-    title: titleValues.map![json["title"]],
+    title: titleValues.map[json["title"]],
     firstName: json["firstName"],
     lastName: json["lastName"],
     picture: json["picture"],
@@ -107,7 +107,7 @@ class Owner {
 
   Map<String, dynamic> toJson() => {
     "id": id,
-    "title": titleValues.reverse![title],
+    "title": titleValues.reverse[title],
     "firstName": firstName,
     "lastName": lastName,
     "picture": picture,
@@ -124,14 +124,14 @@ final titleValues = EnumValues({
 });
 
 class EnumValues<T> {
-  Map<String, T>? map;
-  Map<T, String>? reverseMap;
+  Map<String, T> map;
+  Map<T, String> reverseMap;
 
   EnumValues(this.map);
 
-  Map<T, String>? get reverse {
+  Map<T, String> get reverse {
     if (reverseMap == null) {
-      reverseMap = map!.map((k, v) => new MapEntry(v, k));
+      reverseMap = map.map((k, v) => new MapEntry(v, k));
     }
     return reverseMap;
   }

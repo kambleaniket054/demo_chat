@@ -146,7 +146,7 @@ class homescreenstate extends ResumableState<homescreen> with AutomaticKeepAlive
                   }
                   else {
 
-                    pushScreenname(mainnavigationkey.currentContext!,fetchimageview());
+                    pushScreenname(mainnavigationkey.currentContext,fetchimageview());
                     return;
                   }
                   pageController.animateToPage(index, duration: Duration(microseconds: 1), curve: Curves.ease);

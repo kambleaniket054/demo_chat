@@ -10,14 +10,14 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
-late GlobalKey<NavigatorState> mainnavigationkey;
-late GlobalKey<NavigatorState> navigationkeys;
-GoogleSignInAccount? userdata;
-late User usredetails;
-late  PickedFile pickedFile;
+ GlobalKey<NavigatorState> mainnavigationkey;
+ GlobalKey<NavigatorState> navigationkeys;
+GoogleSignInAccount userdata;
+ User usredetails;
+  PickedFile pickedFile;
 
 StreamController<bool> datacontroller = StreamController<bool>.broadcast();
-late  List<DragableWidget> Listwidgets = [];
+  List<DragableWidget> Listwidgets = [];
  List<dynamic> postdata1 =[];
 var data;
 FirebaseFirestore firestore = FirebaseFirestore.instance;

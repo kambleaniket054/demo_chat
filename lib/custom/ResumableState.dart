@@ -13,7 +13,7 @@ import 'package:flutter/material.dart';
 
 class Resume {
   dynamic data;
-  late String source;
+   String source;
 }
 
 abstract class ResumableState<T extends StatefulWidget> extends State<T> with WidgetsBindingObserver {
@@ -36,7 +36,7 @@ abstract class ResumableState<T extends StatefulWidget> extends State<T> with Wi
   }
 
   /// This method is replacement of Navigator.push(), but fires onResume() after route popped
-  Future<T> push<T extends Object>(BuildContext context, Route<T> route, [String? source]) {
+  Future<T> push<T extends Object>(BuildContext context, Route<T> route, [String source]) {
     _isPaused = true;
     onPause();
 
@@ -44,22 +44,22 @@ abstract class ResumableState<T extends StatefulWidget> extends State<T> with Wi
       _isPaused = false;
 
       resume.data = value;
-      resume.source = source!;
+      resume.source = source;
 
       onResume();
-      return value!;
+      return value;
     });
   }
 
   /// This method is replacement of Navigator.pushNamed(), but fires onResume() after route popped
-  Future<T> pushNamed<T extends Object>(BuildContext context, String routeName, {Object? arguments}) {
+  Future<T> pushNamed<T extends Object>(BuildContext context, String routeName, {Object arguments}) {
     _isPaused = true;
     onPause();
 
-    return pushNamedIfNotCurrent(context, routeName, arguments: arguments!);
+    return pushNamedIfNotCurrent(context, routeName, arguments: arguments);
   }
 
-  pushNamedIfNotCurrent(BuildContext context, String routeName, {Object? arguments}) {
+  pushNamedIfNotCurrent(BuildContext context, String routeName, {Object arguments}) {
     if (!isCurrent(routeName)) {
       Navigator.of(context).pushNamed(routeName, arguments: arguments).then((value) {
         _isPaused = false;

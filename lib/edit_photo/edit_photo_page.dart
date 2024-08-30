@@ -12,7 +12,7 @@ import 'menu/add text/add_text_page.dart';
 import 'menu/delete_text/delete_text_dialog.dart';
 
 class EditPhotoPage extends StatelessWidget {
-  EditPhotoPage({Key? key}) : super(key: key);
+  EditPhotoPage({Key key}) : super(key: key);
   StreamController<WidgetState> backbuttonstate = StreamController.broadcast();
   final screenshotController = ScreenshotController();
 
@@ -245,8 +245,8 @@ class EditPhotoPage extends StatelessWidget {
 }
 
 Widget iconButton({
-  required Function() onTap,
-  required IconData icon,
+   Function() onTap,
+   IconData icon,
   double iconSize = 32,
   double buttonSize = 54,
 }) {
@@ -270,8 +270,8 @@ Widget iconButton({
 
 class MenuAction extends StatelessWidget {
   const MenuAction({
-    Key? key,
-    required this.screenshotController,
+    Key key,
+     this.screenshotController,
   }) : super(key: key);
 
   final ScreenshotController screenshotController;
@@ -328,7 +328,7 @@ class MenuAction extends StatelessWidget {
 
 class MenuEdit extends StatelessWidget {
   StreamController controller;
-   MenuEdit({Key? key,required this.controller}) : super(key: key);
+   MenuEdit({Key key, this.controller}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -354,7 +354,7 @@ class MenuEdit extends StatelessWidget {
             controller.add(WidgetState.editing);
 
             /// wait for text edit done / cancel
-            final result = await addText(context) as DragableWidgetTextChild?;
+            final result = await addText(context) as DragableWidgetTextChild;
 
             /// change state to idle
             /// so the menu UI will visible again
@@ -386,7 +386,7 @@ class MenuEdit extends StatelessWidget {
                   final result = await addText(
                     context,
                     child,
-                  ) as DragableWidgetTextChild?;
+                  ) as DragableWidgetTextChild;
 
                   /// change state to idle
                   /// so the menu UI will visible again

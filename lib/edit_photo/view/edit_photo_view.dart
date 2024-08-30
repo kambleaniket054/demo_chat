@@ -7,7 +7,7 @@ import 'base_photo.dart';
 
 
 class EditPhotoView extends StatelessWidget {
-  const EditPhotoView({Key? key}) : super(key: key);
+  const EditPhotoView({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +32,7 @@ class EditPhotoView extends StatelessWidget {
 }
 
 class EditLayer extends StatelessWidget {
-  const EditLayer({Key? key}) : super(key: key);
+  const EditLayer({Key key}) : super(key: key);
   // EditPhotoCubit epc;
   @override
   Widget build(BuildContext context) {

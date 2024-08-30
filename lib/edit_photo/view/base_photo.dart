@@ -7,7 +7,7 @@ import '../../globalfunction.dart';
 import '../cubit/edit_photo_cubit.dart';
 
 class BasePhoto extends StatelessWidget {
-  const BasePhoto({Key? key}) : super(key: key);
+  const BasePhoto({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

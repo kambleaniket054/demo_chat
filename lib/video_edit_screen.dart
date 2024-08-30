@@ -8,8 +8,8 @@ class VideoEditorUI extends StatefulWidget {
 }
 
 class _VideoEditorUIState extends State<VideoEditorUI> {
-  late VideoPlayerController _videoController;
-  late AudioPlayer _audioPlayer;
+   VideoPlayerController _videoController;
+   AudioPlayer _audioPlayer;
   Duration _currentPosition = Duration.zero;
   ScrollController _scrollController = ScrollController();
   bool _isPlaying = false;
@@ -227,7 +227,7 @@ class Track extends StatelessWidget {
   final List<ClipItem> clips;
   final bool isAudio;
 
-  Track({required this.clips, this.isAudio = false});
+  Track({ this.clips, this.isAudio = false});
 
   @override
   Widget build(BuildContext context) {
@@ -245,13 +245,13 @@ class ClipItem extends StatelessWidget {
   final Color color;
   final double width;
   final String title;
-  final VideoPlayerController? videoController;
-  final AudioPlayer? audioPlayer;
+  final VideoPlayerController videoController;
+  final AudioPlayer audioPlayer;
 
   ClipItem({
-    required this.color,
-    required this.width,
-    required this.title,
+     this.color,
+     this.width,
+     this.title,
     this.videoController,
     this.audioPlayer,
   });

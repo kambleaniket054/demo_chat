@@ -6,5 +6,5 @@ abstract class profileEvent{}
 
 class fecthprofiledetails extends profileEvent{
 String uid;
-fecthprofiledetails({required this.uid});
+fecthprofiledetails({ this.uid});
 }
