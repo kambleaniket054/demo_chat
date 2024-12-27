@@ -263,8 +263,10 @@ class photoeditscreen extends StatelessWidget{
    centerTitle: false,
         actions: [
           TextButton(onPressed: ()async{
+            var dialogcontext;
             showDialog(context: context,builder: (context){
-              return Center(child: CircularProgressIndicator(),);
+              dialogcontext = context;
+              return const Center(child: CircularProgressIndicator(),);
             }
             );
             // required this.id,
@@ -275,34 +277,48 @@ class photoeditscreen extends StatelessWidget{
             // required this.publishDate,
             // required this.owner,
             // this.commentlist,
-            List<int> imageBytes = await file.readAsBytes();
-            var img =  base64Encode(imageBytes);
-            Map<String, dynamic> submap = {
-              "id": usredetails.uid.toString(),
-              "publishDate":Timestamp.now(),
-              "image":img,
-              "likes":'0',
-              "tags":[""],
-              "text":'new post',
-              "owner":usredetails.displayName ?? "USER",
-            };
+            try {
+              List<int> imageBytes = await file.readAsBytes();
+              var img =  base64Encode(imageBytes);
 
-            // Map<String, dynamic> messagedata = {submap};
-            // FieldValue.arrayUnion(["greater_virginia"]
-            FirebaseFirestore.instance.collection("12345678").doc().set(submap).then((value){
-              print("success");
-              Navigator.pushAndRemoveUntil(context,MaterialPageRoute(builder: (context)=>homescreen()),(Routes){
-                return false;
+              Map<String, dynamic> submap = {
+                "id": Usersprofile.uid.toString(),
+                "publishDate":Timestamp.now(),
+                "image":Platform.isIOS ? json.encode(imageBytes) : img,
+                "likes":'0',
+                "tags":[""],
+                "text":'new post',
+                "owner":{
+                  "firstName" : Usersprofile.displayName ?? "",
+                  "id" : Usersprofile.uid,
+                  "lastName" : "",
+                  "picture" : Usersprofile.photoURL ?? "",
+                  "title":"",
+                },
+                "Comments":{}/*Usersprofile.displayName ?? "USER"*/,
+              };
+              print(submap);
+
+              FirebaseFirestore.instance.collection("12345678").doc().set(submap).then((value){
+                print("success");
+                // Navigator.pushAndRemoveUntil(context,MaterialPageRoute(builder: (context)=>homescreen()),(Routes){
+                //   return false;
+                // });
+                if(dialogcontext != null){
+                  Navigator.pop(dialogcontext);
+                }
+                Navigator.pop(context);
+                // Navigator.pop(context);
+
+                // Messagecontroller.clear();
+              }).onError((error, stackTrace){
+                print(error.toString());
+                Navigator.pop(dialogcontext);
               });
-              // Navigator.pop(context);
-              // Navigator.pop(context);
-
-              // Messagecontroller.clear();
-            }).onError((error, stackTrace){
-              print(error.toString());
-              Navigator.pop(context);
-            });
-          }, child: Text("Submit",style: TextStyle(color: Colors.blue,fontSize: 18),)),
+            } on Exception catch (e) {
+            Navigator.pop(dialogcontext);
+            }
+          }, child: const Text("Submit",style: TextStyle(color: Colors.blue,fontSize: 18),)),
         ],
    ),
       body: Column(

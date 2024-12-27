@@ -31,7 +31,7 @@ class searchpagestate extends State<searchpage> with AutomaticKeepAliveClientMix
         automaticallyImplyLeading: false,
         title: InkWell(
           onTap: (){
-            Navigator.push(context, MaterialPageRoute(builder: (context)=> serchdetail()));
+            Navigator.push(context, MaterialPageRoute(builder: (context)=> serchdetail(fromscreen:"")));
           },
           child: Container(
             key: key,
@@ -92,8 +92,8 @@ class searchpagestate extends State<searchpage> with AutomaticKeepAliveClientMix
                        padding: const EdgeInsets.only(left: 2,right: 2,bottom: 20,top: 20),
                        child: CachedNetworkImage(
                          imageUrl: data.image,
-                         progressIndicatorBuilder: (context, url, downloadProgress) =>
-                             Center(child: CircularProgressIndicator(value: downloadProgress.progress,color: Colors.black38,backgroundColor: Colors.white54,)),
+                         // progressIndicatorBuilder: (context, url, downloadProgress) =>
+                         //     Center(child: CircularProgressIndicator(value: downloadProgress.progress,color: Colors.black38,backgroundColor: Colors.white54,)),
                          errorWidget: (context, url, error) => const Icon(Icons.error),
                        ),
                      ),
@@ -101,10 +101,9 @@ class searchpagestate extends State<searchpage> with AutomaticKeepAliveClientMix
                   });
                 },
                 child: CachedNetworkImage(
-
                   imageUrl: data.image,
-                  progressIndicatorBuilder: (context, url, downloadProgress) =>
-                      Center(child: CircularProgressIndicator(value: downloadProgress.progress,color: Colors.black38,backgroundColor: Colors.white54,)),
+                  // progressIndicatorBuilder: (context, url, downloadProgress) =>
+                  //     Center(child: CircularProgressIndicator(value: downloadProgress.progress,color: Colors.black38,backgroundColor: Colors.white54,)),
                   errorWidget: (context, url, error) => const Icon(Icons.error),
                 ),
               );

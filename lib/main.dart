@@ -1,12 +1,13 @@
 import 'dart:async';
 
+import 'package:demo_chat/Homescreen.dart';
 import 'package:demo_chat/globalfunction.dart';
 import 'package:demo_chat/loginScreen.dart';
-import 'package:flutter/material.dart';
+import 'package:demo_chat/vido_edit_new/service_locator.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-
+import 'package:permission_handler/permission_handler.dart';
 // import 'package:firebase_database/firebase_database.dart';
 //
 // import 'Homepage.dart';
@@ -17,7 +18,15 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 void main()async{
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  PermissionHandler permission = PermissionHandler();
 
+  final status = await permission.checkPermissionStatus(PermissionGroup.storage);
+  if (status != 2) {
+    Map<PermissionGroup, PermissionStatus> permissions =  await permission.requestPermissions([PermissionGroup.storage]);
+  }
+
+  getuserloginIn();
+  setupLocator();
   runApp(const MyApp());
 }
 
@@ -47,7 +56,7 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key key,  this.title}) : super(key: key);
+  const MyHomePage({Key key, this.title}) : super(key: key);
   final String title;
 
   @override
@@ -59,6 +68,23 @@ class _MyHomePageState extends State<MyHomePage> {
 
 
  final GlobalKey<NavigatorState> _mainnavigationkey = GlobalKey<NavigatorState>();
+ var user;
+ @override
+  void initState() {
+    // TODO: implement initState
+   // getuserloginIn();
+   // user = FirebaseAuth.instance.authStateChanges().listen((user) {
+   //   if (user == null) {
+   //     print('User is currently signed out!');
+   //   } else {
+   //     Usersprofile = user;
+   //     print('User is signed in!');
+   //   }
+   // });
+    super.initState();
+
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -69,14 +95,17 @@ class _MyHomePageState extends State<MyHomePage> {
         return Future.value(true);
       },
       child: Scaffold(
+        primary: true,
         resizeToAvoidBottomInset: false,
         body: MaterialApp(
           navigatorKey: _mainnavigationkey,
-          home:loginscreen(),
+          home: Usersprofile != null ? homescreen() : loginscreen(),
         ),
       ),
     );
   }
+
+
 
   @override
   void dispose() {
@@ -92,4 +121,6 @@ class _MyHomePageState extends State<MyHomePage> {
      print(e.toString()); // TODO
     }
   }
+
+
 }

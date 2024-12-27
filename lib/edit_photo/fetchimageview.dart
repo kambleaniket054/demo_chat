@@ -7,9 +7,9 @@ import 'package:demo_chat/photoeditscreen.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:photo_manager/photo_manager.dart';
-import 'package:shimmer/shimmer.dart';
+
+// import '../VideoEdittor.dart';
 import '../globalfunction.dart';
-import 'edit_photo_page.dart';
 
 class fetchimageview extends StatefulWidget {
   const fetchimageview({Key key}) : super(key: key);
@@ -21,12 +21,14 @@ class fetchimageview extends StatefulWidget {
 class fetchimageviewState extends State<fetchimageview> {
   Uint8List _file;
   bool isLoading = false;
+  bool islognpresstrue = false;
+  List selectedmediaList = [];
   final TextEditingController _descriptionController = TextEditingController();
     List<AssetEntity> recentAssets = [];
   var selectedimage;
   List<AssetEntity> videolist = [];
   List<AssetEntity> imagelist = [];
-StreamController filtercontroller = StreamController<String>();
+StreamController<String> filtercontroller = StreamController<String>();
   _selectImage(BuildContext parentContext) async {
     return showDialog(
       context: parentContext,
@@ -152,7 +154,18 @@ StreamController filtercontroller = StreamController<String>();
           TextButton(
             onPressed: ()async{
               var imagedata = await selectedimage.file;
-              Navigator.push(context, MaterialPageRoute(builder: (context)=>photoeditscreen(imagedata)));
+              /* postImage(
+              userProvider.getUser.uid,
+              userProvider.getUser.username,
+              userProvider.getUser.photoUrl,
+            ),*/
+              if(selectedimage.type == AssetType.video){
+                // Navigator.push(context, MaterialPageRoute(builder: (context)=>VideoEdittor(imagedata)));/*VideoEdittor(imagedata))*/
+              }
+              else {
+                Navigator.push(context, MaterialPageRoute(builder: (context) =>
+                    photoeditscreen(imagedata))); /*VideoEdittor(imagedata))*/
+              }
     },/* postImage(
               userProvider.getUser.uid,
               userProvider.getUser.username,
@@ -189,7 +202,7 @@ StreamController filtercontroller = StreamController<String>();
           recentAssets == [] ? const Center(
             child: CircularProgressIndicator(),
           ):Expanded(
-    child:StreamBuilder(
+    child:StreamBuilder<String>(
       initialData: 'Images',
       stream: filtercontroller.stream,
       builder: (context, snapshot) {
@@ -223,7 +236,7 @@ StreamController filtercontroller = StreamController<String>();
                   underline: Container(),
                   hint: Center(child: droplist.first),
                   items:droplist, onChanged: (value) {
-                  filtercontroller.add(value);
+                  filtercontroller.add(value.toString());
                 },
                 ),
               ),
@@ -236,7 +249,7 @@ StreamController filtercontroller = StreamController<String>();
                     // controller: widget.scrollCtr,
                     itemCount: recentAssets.length,
                     gridDelegate:
-                    SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 4,crossAxisSpacing: 1.5,mainAxisSpacing:1.5),
+                    const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 4,crossAxisSpacing: 1.5,mainAxisSpacing:1.5),
                     itemBuilder: (BuildContext context, int index) {
                       return FutureBuilder<File>(
                           future: recentAssets[index].file,
@@ -250,11 +263,20 @@ StreamController filtercontroller = StreamController<String>();
                             }
                             return InkWell(
                                 onTap: (){
-                                  selectedimage = recentAssets[index];
-                                  setState(() {
+                                  if (!islognpresstrue) {
+                                    selectedimage = recentAssets[index];
+                                    setState(() {
 
-                                  });
+                                    });
+                                  }
+                                  else{
+                                    selectedmediaList.add(recentAssets[index]);
+                                    filtercontroller.add(snapshot.data.toString());
+                                  }
                                 },
+                              onLongPress: (){
+                                  islognpresstrue = true;
+                              },
                                 child: AssetEntityImage(
                                   recentAssets[index],
                                   fit: BoxFit.cover,
@@ -333,10 +355,15 @@ StreamController filtercontroller = StreamController<String>();
     );
   }
    pickimages()async {
+    // List picklist = [];
+    // picklist = (await ImagePicker().getMultiImage(
+    //    imageQuality:
+    //  ))!;
 
-    pickedFile = await ImagePicker().getImage(
+    pickedFile = (await ImagePicker().getImage(
       source: ImageSource.gallery,
-    );
+        maxHeight:  200 , maxWidth: 200,
+    )?? PickedFile(""));
     return pickedFile.readAsBytes();
 
     // Navigator.push(context, MaterialPageRoute(builder: (context)=> EditPhotoPage()));

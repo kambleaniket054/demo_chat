@@ -4,7 +4,7 @@ import 'dart:ui';
 
 import 'package:demo_chat/Homescreen.dart';
 import 'package:demo_chat/globalfunction.dart';
-import 'package:demo_chat/userdetails.dart';
+import 'package:demo_chat/ProfileView.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -301,19 +301,19 @@ class loginscreenState  extends State<loginscreen>{
 
 }
 */
-import 'package:demo_chat/userdetails.dart';
-import 'package:flutter/material.dart';
-import 'dart:math';
+import 'dart:async';
 import 'dart:ui';
 
 import 'package:demo_chat/Homescreen.dart';
 import 'package:demo_chat/globalfunction.dart';
+import 'package:demo_chat/registrationpage.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_database/firebase_database.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 import 'Homescreen.dart';
 import 'globalfunction.dart';
 
@@ -334,7 +334,9 @@ class loginscreen extends StatelessWidget {
       if(credential ==null){
         return;
       }
-      usredetails = credential.user;
+      Usersprofile = credential.user;
+      SharedPreferences sharedPreference = await SharedPreferences.getInstance();
+      sharedPreference.setString("user", Usersprofile.uid.toString());
       Navigator.pushReplacement(mainnavigationkey.currentContext,MaterialPageRoute (builder: (BuildContext context) =>  homescreen()));
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
@@ -344,217 +346,312 @@ class loginscreen extends StatelessWidget {
       }
     }
   }
-
   @override
   Widget build(BuildContext context) {
+    // getscreen(context);
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: Colors.grey[300],
       body: SafeArea(
-        child: Center(
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const SizedBox(height: 50),
-
-                // logo
-                Container(
-                  padding: const EdgeInsets.all(10),
-                  decoration:  BoxDecoration(
-                    border: Border.all(color: Colors.white),
-                    // borderRadius: BorderRadius.circular(16),
-                    shape: BoxShape.circle,
-                    color: Colors.grey[200],
-                    // color: Color(0XFFFCFCFC),
-                    // shape: BoxShape.circle,
-                    // boxShadow: [
-                    //   // BoxShadow(color: Colors.black38,
-                    //   //   offset: Offset(4,2),
-                    //   //   blurRadius: 3,
-                    //   //   // inset:true,
-                    //   // ),
-                    //   // BoxShadow(color: Colors.white70,
-                    //   //     offset: Offset(-5,-2),
-                    //   //     blurRadius: 2
-                    //   // ),
-                    // ],
-                  ),
-                  child: Container(
-                    padding: EdgeInsets.all(30),
-                    decoration: const BoxDecoration(
-                      color: Colors.black,
-                      shape: BoxShape.circle,
-                      border: Border.fromBorderSide(BorderSide(color: Colors.black)),
-                      // boxShadow: [
-                      //   BoxShadow(color: Colors.black38,
-                      //     offset: Offset(4,2),
-                      //     blurRadius: 3,
-                      //     // inset:true,
-                      //   ),
-                      //   BoxShadow(color: Colors.white70,
-                      //       offset: Offset(-5,-2),
-                      //       blurRadius: 2
-                      //   ),
-                      // ],
-                    ),
-                    child: createTextThemeWise("DOT", const TextStyle(
-                      fontSize: 26,
-                      // backgroundColor: Colors.white,
-                      // height: 14,
-                      fontWeight: FontWeight.bold,
-                      // shadows: [
-                      //   Shadow(color: Colors.red,offset: Offset(1, 1),blurRadius: 5),
-                      // ],
-                      fontStyle: FontStyle.italic,
-                      color: Colors.white,
-                      // decorationColor: Colors.black38,
-                    )),
-                  ),
-                ),
-               /* Container(
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.white
-                  ),
-                  padding: EdgeInsets.all(20),
-                  child: const Icon(
-                    Icons.person,
-                    size: 100,
-                  ),
-                ),*/
-
-                const SizedBox(height: 50),
-
-                // welcome back, you've been missed!
-               /* Text(
-                  'Welcome back you\'ve been missed!',
-                  style: TextStyle(
-                    color: Colors.grey[700],
-                    fontSize: 16,
-                  ),
-                ),*/
-
-                // const SizedBox(height: 25),
-
-                // username textfield
-                MyTextField(
-                  controller: usernameController,
-                  hintText: 'Username',
-                  obscureText: false,
-                ),
-
-                const SizedBox(height: 10),
-
-                // password textfield
-                MyTextField(
-                  controller: passwordController,
-                  hintText: 'Password',
-                  obscureText: true,
-                ),
-
-                const SizedBox(height: 10),
-
-                // forgot password?
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Text(
-                        'Forgot Password?',
-                        style: TextStyle(color: Colors.grey[600]),
-                      ),
-                    ],
-                  ),
-                ),
-
-                const SizedBox(height: 25),
-
-                // sign in button
-                MyButton(
-                  onTap: signUserIn,
-                ),
-
-                const SizedBox(height: 50),
-
-                // or continue with
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Divider(
-                          thickness: 0.5,
-                          color: Colors.grey[400],
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                        child: Text(
-                          'Or continue with',
-                          style: TextStyle(color: Colors.grey[700]),
-                        ),
-                      ),
-                      Expanded(
-                        child: Divider(
-                          thickness: 0.5,
-                          color: Colors.grey[400],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-
-                const SizedBox(height: 50),
-
-                // google + apple sign in buttons
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children:  [
-                    // google button
-                    SquareTile(imagePath: 'assets/google.png'),
-
-                    const SizedBox(width: 25),
-
-                    // apple button
-                    SquareTile(imagePath: 'assets/apple.png')
+        child: Stack(
+          children: [
+            Container(
+              foregroundDecoration: BoxDecoration(
+                // color: Colors.grey.withOpacity(0.5),
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [Colors.grey.withOpacity(0.5),Colors.grey.withOpacity(0.7),Colors.grey.withOpacity(0.8),Colors.grey.withOpacity(0.8),Colors.white],
+                )
+              ),
+                child: Column(
+                  children: [
+                    Image.network("https://www.jqueryscript.net/images/Instagram-Posts-User-Hashtag-jQuery-instaHistory.jpg"),
                   ],
-                ),
-
-                const SizedBox(height: 50),
-
-                // not a member? register now
-                Row(
+                )),
+            Center(
+              child: SingleChildScrollView(
+                child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(
-                      'Not a member?',
-                      style: TextStyle(color: Colors.grey[700]),
-                    ),
-                    const SizedBox(width: 4),
-                    const Text(
-                      'Register now',
-                      style: TextStyle(
-                        color: Colors.blue,
-                        fontWeight: FontWeight.bold,
+                    const SizedBox(height: 50),
+
+                    // logo
+                    Container(
+                      padding: const EdgeInsets.all(10),
+                      decoration:  BoxDecoration(
+                        border: Border.all(color: Colors.white),
+                        // borderRadius: BorderRadius.circular(16),
+                        shape: BoxShape.circle,
+                        color: Colors.grey[200],
+                        // color: Color(0XFFFCFCFC),
+                        // shape: BoxShape.circle,
+                        // boxShadow: [
+                        //   // BoxShadow(color: Colors.black38,
+                        //   //   offset: Offset(4,2),
+                        //   //   blurRadius: 3,
+                        //   //   // inset:true,
+                        //   // ),
+                        //   // BoxShadow(color: Colors.white70,
+                        //   //     offset: Offset(-5,-2),
+                        //   //     blurRadius: 2
+                        //   // ),
+                        // ],
+                      ),
+                      child: Container(
+                        padding: EdgeInsets.all(30),
+                        decoration: const BoxDecoration(
+                          color: Colors.black,
+                          shape: BoxShape.circle,
+                          border: Border.fromBorderSide(BorderSide(color: Colors.black)),
+                          // boxShadow: [
+                          //   BoxShadow(color: Colors.black38,
+                          //     offset: Offset(4,2),
+                          //     blurRadius: 3,
+                          //     // inset:true,
+                          //   ),
+                          //   BoxShadow(color: Colors.white70,
+                          //       offset: Offset(-5,-2),
+                          //       blurRadius: 2
+                          //   ),
+                          // ],
+                        ),
+                        child: createTextThemeWise("DOT", style: const TextStyle(
+                          fontSize: 26,
+                          // backgroundColor: Colors.white,
+                          // height: 14,
+                          fontWeight: FontWeight.bold,
+                          // shadows: [
+                          //   Shadow(color: Colors.red,offset: Offset(1, 1),blurRadius: 5),
+                          // ],
+                          fontStyle: FontStyle.italic,
+                          color: Colors.white,
+                          // decorationColor: Colors.black38,
+                        )),
                       ),
                     ),
+                   /* Container(
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors.white
+                      ),
+                      padding: EdgeInsets.all(20),
+                      child: const Icon(
+                        Icons.person,
+                        size: 100,
+                      ),
+                    ),*/
+
+                    const SizedBox(height: 50),
+
+                    // welcome back, you've been missed!
+                   /* Text(
+                      'Welcome back you\'ve been missed!',
+                      style: TextStyle(
+                        color: Colors.grey[700],
+                        fontSize: 16,
+                      ),
+                    ),*/
+
+                    // const SizedBox(height: 25),
+
+                    // username textfield
+                    MyTextField(
+                      controller: usernameController,
+                      hintText: 'Username',
+                      obscureText: false,
+                    ),
+
+                    const SizedBox(height: 10),
+
+                    // password textfield
+                    MyTextField(
+                      controller: passwordController,
+                      hintText: 'Password',
+                      obscureText: true,
+                    ),
+
+                    const SizedBox(height: 10),
+
+                    // forgot password?
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Text(
+                            'Forgot Password?',
+                            style: TextStyle(color: Colors.grey[900]),
+                          ),
+                        ],
+                      ),
+                    ),
+
+                    const SizedBox(height: 25),
+
+                    // sign in button
+                    MyButton(
+                      onTap: signUserIn,
+                    ),
+
+                    const SizedBox(height: 50),
+
+                    // or continue with
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Divider(
+                              thickness: 0.5,
+                              color: Colors.grey[400],
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                            child: Text(
+                              'Or continue with',
+                              style: TextStyle(color: Colors.grey[800]),
+                            ),
+                          ),
+                          Expanded(
+                            child: Divider(
+                              thickness: 0.5,
+                              color: Colors.grey[400],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+
+                    const SizedBox(height: 50),
+
+                    // google + apple sign in buttons
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children:  [
+                        // google button
+                        InkWell(
+                            onTap: ()async{
+                              try{
+                          // bool id = await GoogleSignIn().isSignedIn();
+                          // if(id){
+                          // await GoogleSignIn().signOut();
+                          // }
+                          final GoogleSignInAccount googleUser = await GoogleSignIn(hostedDomain: "",
+                            clientId: "",).signIn();
+
+                          // Obtain the auth details from the request
+                          final GoogleSignInAuthentication googleAuth = await googleUser?.authentication;
+
+                          // Create a new credential
+                          final credential = GoogleAuthProvider.credential(
+                          accessToken: googleAuth?.accessToken,
+                          idToken: googleAuth?.idToken,
+                          );
+
+                          if (credential != null) {
+                          var data =  await FirebaseAuth.instance.signInWithCredential(credential);
+                          // print(data.additionalUserInfo.profile);
+                          Usersprofile = data.user;
+                          var ref = FirebaseDatabase.instance.reference().child("Userdetails").child(data.user?.uid);
+                          // print(data.additionalUserInfo.profile);\
+
+                          // if(Usersprofile.uid == )
+                          var haschild = FirebaseDatabase.instance.reference().child("Userdetails").orderByChild(data.user?.uid).once().then((value) => value);
+                          await ref.update({
+                          'username':data.user?.displayName,
+                          'creationdate' : data.user?.metadata.creationTime.toString(),
+                          'photourl': data.user?.photoURL,
+                          'followers':[],
+                          'following':[],
+                          'email':data.user?.email,
+                          "phonenumber":data.user?.phoneNumber
+                          },);
+                          Navigator.pushReplacement(mainnavigationkey.currentContext,MaterialPageRoute (builder: (BuildContext context) =>  homescreen()));
+                          }
+                          } catch (e) {
+                            print(e.toString());
+                          }
+
+    // Once signed in, return the UserCredential
+
+    // ref.child('users').set(data);
+                            },
+                            child: SquareTile(imagePath: 'assets/google.png')),
+
+                        const SizedBox(width: 25),
+
+                        // apple button
+                        SquareTile(imagePath: 'assets/apple.png')
+                      ],
+                    ),
+
+                    const SizedBox(height: 50),
+
+                    // not a member? register now
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          'Not a member?',
+                          style: TextStyle(color: Colors.grey[700]),
+                        ),
+                        const SizedBox(width: 4),
+                        InkWell(
+                          onTap: (){
+                            Navigator.of(context).push(MaterialPageRoute(builder: (context)=>Registrationpage()));
+                          },
+                          child: const Text(
+                            'Register now',
+                            style: TextStyle(
+                              color: Colors.blue,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ],
+                    )
                   ],
-                )
-              ],
+                ),
+              ),
             ),
-          ),
+          ],
         ),
       ),
     );
   }
-  
-  
-  
-  
+
+
+
+  getscreen(BuildContext context)async{
+    try {
+      SharedPreferences sharedPreference = await SharedPreferences.getInstance();
+      var user = sharedPreference.get("user");
+      var data = FirebaseAuth.instance.authStateChanges();
+      data.asBroadcastStream().listen((event) {
+        if(event?.uid == user){
+          Usersprofile = FirebaseAuth.instance.currentUser;
+          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>homescreen()));
+        }
+      });
+         print(data);
+      if(user != null){
+        return homescreen();
+      }
+    } catch (e) {
+     print(e.toString());
+    }
+
+    // else{
+    //   return loginscreen();
+    // }
+  }
+
+
 }
 
-SquareTile({ String imagePath}) {
+Widget SquareTile({String imagePath}) {
   return Container(
     padding: EdgeInsets.all(20),
     decoration: BoxDecoration(

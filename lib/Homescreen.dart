@@ -1,22 +1,17 @@
 import 'dart:async';
 
 import 'package:demo_chat/Homepage.dart';
-import 'package:demo_chat/arfilterscreen.dart';
+import 'package:demo_chat/ProfileView.dart';
 import 'package:demo_chat/custom/ResumableState.dart';
-import 'package:demo_chat/detailpage.dart';
-import 'package:demo_chat/edit_photo/edit_photo_page.dart';
 import 'package:demo_chat/globalfunction.dart';
-import 'package:demo_chat/librarypage.dart';
-import 'package:demo_chat/photoeditscreen.dart';
 import 'package:demo_chat/reelview.dart';
-import 'package:demo_chat/searchpage.dart';
-import 'package:demo_chat/userdetails.dart';
+import 'package:demo_chat/serchdetail.dart';
+import 'package:demo_chat/vido_edit_new/videomain.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import 'edit_photo/fetchimageview.dart';
-import 'edit_photo/view/edit_photo_view.dart';
+import 'Colorcode.dart';
 
 class homescreen extends StatefulWidget{
   createState()=> homescreenstate();
@@ -36,7 +31,6 @@ class homescreenstate extends ResumableState<homescreen> with AutomaticKeepAlive
   void initState() {
     super.initState();
     navigationkeys = navigationkey;
-
     // TODO: implement initState
   }
 
@@ -44,8 +38,7 @@ class homescreenstate extends ResumableState<homescreen> with AutomaticKeepAlive
   Widget build(BuildContext context) {
 
     return Scaffold(
-     // primary: true,
-      resizeToAvoidBottomInset: true,
+      resizeToAvoidBottomInset: false,
       body:getBottomScreen(), /*Navigator(
         key: navigationkey,
         onGenerateRoute: (RouteSettings setting){
@@ -84,75 +77,73 @@ class homescreenstate extends ResumableState<homescreen> with AutomaticKeepAlive
       bottomNavigationBar: StreamBuilder<int>(
           stream: changeindexstate.stream,
           builder: (context, snapshot) {
-            return SizedBox(
-              height: 45,
-              child: BottomNavigationBar(
-                type: BottomNavigationBarType.fixed,
-                currentIndex: index,
-                selectedFontSize:0.0,
-                unselectedFontSize: 0.0,
-                backgroundColor: isblack ? Colors.black : Colors.white,
-                showSelectedLabels: false,
-                showUnselectedLabels: false,
-                iconSize: 24,
-                items:  [
-                  BottomNavigationBarItem(icon: Icon(Icons.home_outlined,color: !isblack ? Colors.black87 : Colors.white ,size: 30,),
-                      activeIcon: Icon(Icons.home_filled,color: !isblack ? Colors.black87 : Colors.white ,size: 30,),
-                      label: ""),
-                  BottomNavigationBarItem(icon: Icon(Icons.movie_outlined,color: !isblack ? Colors.black87 : Colors.white ,size: 30,),
-                      activeIcon: Icon(Icons.movie,color: !isblack ? Colors.black87 : Colors.white ,size: 30,),label: ""),
-                  BottomNavigationBarItem(icon: Icon(Icons.add_box_outlined,color: !isblack ? Colors.black87 : Colors.white ,size: 30,),
-                      activeIcon: Icon(Icons.add_box,color: !isblack ? Colors.black87 : Colors.white ,size: 30,),label: ""),
-                  BottomNavigationBarItem(icon: Icon(Icons.search_outlined,color: !isblack ? Colors.black87 : Colors.white ,size: 30,),
-                      activeIcon: Icon(Icons.search_rounded,color: !isblack ? Colors.black87 : Colors.white ,size: 30,),label: ""),
-                  BottomNavigationBarItem(icon: Icon(Icons.person_outline_rounded,color: !isblack ? Colors.black87 : Colors.white ,size: 30,),
-                      activeIcon: Icon(Icons.person,color: !isblack ? Colors.black87 : Colors.white ,size: 30,),label: ""),
-                ],
-                onTap: (index){
-                  isblack = false;
-                  this.index = index;
-                  if (index != 2) {
-                   if(index == 1){
-                    isblack = true;
-                    WidgetsBinding.instance?.addPostFrameCallback((_) {
-                      SystemChrome.setSystemUIOverlayStyle(
-                          const SystemUiOverlayStyle(
-                            statusBarColor: Colors.transparent,
-                            statusBarBrightness: Brightness.dark,
-                            statusBarIconBrightness: Brightness.light,
-                            systemNavigationBarColor: Colors.black87,
-                            systemNavigationBarDividerColor: Colors.black87,
-                            systemNavigationBarIconBrightness: Brightness.light,
-                          ));
-                    });
-                    // pushScreenname(mainnavigationkey.currentContext!,arfilterscreen());
-                   }
-                   else{
-                     WidgetsBinding.instance?.addPostFrameCallback((_) {
-                       print(_);
-                       SystemChrome.setSystemUIOverlayStyle(
-                         const SystemUiOverlayStyle(
-                           statusBarBrightness: Brightness.dark,
-                           statusBarColor: Colors.white,
-                           statusBarIconBrightness: Brightness.dark,
-                           systemNavigationBarColor: Colors.white,
-                           systemNavigationBarDividerColor: Colors.white,
-                           systemNavigationBarIconBrightness: Brightness.dark,
-                         ),
-                       );
-                     });
-                   }
-                    changeindexstate.add(index);
-                  }
-                  else {
+            return BottomNavigationBar(
+              type: BottomNavigationBarType.fixed,
+              elevation:2,
+              currentIndex: index,
+              selectedFontSize:0.0,
+              unselectedFontSize: 0.0,
+              backgroundColor: isblack ? Colors.black : Colors.white,
+              showSelectedLabels: false,
+              showUnselectedLabels: false,
+              iconSize: 24,
+              items:  [
+                BottomNavigationBarItem(icon: Icon(Icons.home_outlined,color: !isblack ? Colorcode.mattBlack : Colors.white ,size: 30,),
+                    activeIcon: Icon(Icons.home,color: !isblack ? Colorcode.mattBlack : Colors.white ,size: 30,),
+                    label: ""),
+                BottomNavigationBarItem(icon: Icon(Icons.movie_outlined,color: !isblack ? Colorcode.mattBlack : Colors.white ,size: 30,),
+                    activeIcon: Icon(Icons.movie,color: !isblack ? Colorcode.mattBlack : Colors.white ,size: 30,),label: ""),
+                BottomNavigationBarItem(icon: Icon(Icons.add_box_outlined,color: !isblack ? Colorcode.mattBlack : Colors.white ,size: 30,),
+                    activeIcon: Icon(Icons.add_box,color: !isblack ? Colorcode.mattBlack : Colors.white ,size: 30,),label: ""),
+                BottomNavigationBarItem(icon: Icon(Icons.search_outlined,color: !isblack ? Colorcode.mattBlack : Colors.white ,size: 30,),
+                    activeIcon: Icon(Icons.search,color: !isblack ? Colorcode.mattBlack : Colors.white ,size: 30,),label: ""),
+                BottomNavigationBarItem(icon: Icon(Icons.person_outline_rounded,color: !isblack ? Colorcode.mattBlack : Colors.white ,size: 30,),
+                    activeIcon: Icon(Icons.person,color: !isblack ? Colorcode.mattBlack : Colors.white ,size: 30,),label: ""),
+              ],
+              onTap: (index){
+                isblack = false;
+                this.index = index;
+                if (index != 2) {
+                 if(index == 1){
+                  isblack = true;
+                  WidgetsBinding.instance?.addPostFrameCallback((_) {
+                    SystemChrome.setSystemUIOverlayStyle(
+                         SystemUiOverlayStyle(
+                          statusBarColor: Colors.transparent,
+                          statusBarBrightness: Brightness.dark,
+                          statusBarIconBrightness: Brightness.dark,
+                          systemNavigationBarColor: Colorcode.mattBlack,
+                          systemNavigationBarDividerColor: Colorcode.mattBlack,
+                          systemNavigationBarIconBrightness: Brightness.dark,
+                        ));
+                  });
+                  // pushScreenname(mainnavigationkey.currentContext!,arfilterscreen());
+                 }
+                 else{
+                   WidgetsBinding.instance?.addPostFrameCallback((_) {
+                     print(_);
+                     SystemChrome.setSystemUIOverlayStyle(
+                       const SystemUiOverlayStyle(
+                         statusBarBrightness: Brightness.dark,
+                         statusBarColor: Colors.white,
+                         statusBarIconBrightness: Brightness.dark,
+                         systemNavigationBarColor: Colors.white,
+                         systemNavigationBarDividerColor: Colors.white,
+                         systemNavigationBarIconBrightness: Brightness.dark,
+                       ),
+                     );
+                   });
+                 }
+                  changeindexstate.add(index);
+                }
+                else {
 
-                    pushScreenname(mainnavigationkey.currentContext,fetchimageview());
-                    return;
-                  }
-                  pageController.animateToPage(index, duration: Duration(microseconds: 1), curve: Curves.ease);
-                 // navigationkey.currentState?.pushReplacementNamed(names[index]);
-                },
-              ),
+                  pushScreenname(mainnavigationkey.currentContext,MyvideioApp());
+                  return;
+                }
+                pageController.animateToPage(index, duration: Duration(microseconds: 1), curve: Curves.ease);
+               // navigationkey.currentState?.pushReplacementNamed(names[index]);
+              },
             );
           }
       ),
@@ -167,9 +158,7 @@ class homescreenstate extends ResumableState<homescreen> with AutomaticKeepAlive
     );
   }
 
-  @override
-  // TODO: implement wantKeepAlive
-  bool get wantKeepAlive => true;
+
 
   getBottomScreen() {
     return PageView.builder(
@@ -189,11 +178,15 @@ class homescreenstate extends ResumableState<homescreen> with AutomaticKeepAlive
     /*  case 2:
         return fetchimageview();*/
       case 3:
-        return searchpage();
+        return serchdetail(fromscreen: 'home',);
       case 4:
-        return userdetails();
+        return profileView(isuser: true,);
       default :
         return  homepage();
     }
   }
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 }

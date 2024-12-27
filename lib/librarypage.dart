@@ -1,35 +1,38 @@
-import 'dart:math';
-
+import 'package:demo_chat/Model/reelsModel.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:video_player/video_player.dart';
-import 'package:chewie/chewie.dart';
+import 'package:custom_video_player/video_player.dart';
+
+// import 'package:chewie/chewie.dart';
 
 import 'Colorcode.dart';
 
 class librarypage extends StatefulWidget{
+  ReelsModel reelsModel;
+  librarypage(this.reelsModel);
+
   createState()=>librarypagestate();
 }
 class librarypagestate extends State<librarypage>{
    VideoPlayerController _controller;
    Future<void> _initializeVideoPlayerFuture;
-  ChewieController _chewieController;
+  // ChewieController _chewieController;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-   /* _controller = VideoPlayerController.network(
+    _controller = VideoPlayerController.network(
       'https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4',
     );
      _controller.initialize();
     // _controller.setLooping(true);
-    _chewieController = ChewieController(
-      videoPlayerController: _controller,
-      autoPlay: true,
-      showControls: false,
-      looping: true,
-    );*/
+    // _chewieController = ChewieController(
+    //   videoPlayerController: _controller,
+    //   autoPlay: true,
+    //   showControls: false,
+    //   looping: true,
+    // );
     initializePlayer();
     WidgetsBinding.instance?.addPostFrameCallback((_) {
       SystemChrome.setSystemUIOverlayStyle(
@@ -49,17 +52,17 @@ class librarypagestate extends State<librarypage>{
     // TODO: implement dispose
     super.dispose();
     _controller.dispose();
-    _chewieController.dispose();
+    // _chewieController.dispose();
   }
   Future initializePlayer() async {
-    _controller = VideoPlayerController.network('https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4');
+    _controller = VideoPlayerController.network(widget.reelsModel.videourl);
     await Future.wait([_controller.initialize()]);
-    _chewieController = ChewieController(
+  /*  _chewieController = ChewieController(
       videoPlayerController: _controller,
       autoPlay: true,
       showControls: false,
       looping: true,
-    );
+    );*/
     setState(() {});
   }
 
@@ -93,7 +96,7 @@ class librarypagestate extends State<librarypage>{
      body:Stack(
        fit: StackFit.expand,
        children: [
-         _chewieController != null &&
+        /* _chewieController != null &&
              _chewieController.videoPlayerController.value.isInitialized
              ? GestureDetector(
            onDoubleTap: () {
@@ -105,7 +108,7 @@ class librarypagestate extends State<librarypage>{
              controller: _chewieController,
            ),
          )
-             : Column(
+             :*/ Column(
            mainAxisAlignment: MainAxisAlignment.center,
            children: [
              CircularProgressIndicator(),

@@ -6,5 +6,6 @@ abstract class profileEvent{}
 
 class fecthprofiledetails extends profileEvent{
 String uid;
-fecthprofiledetails({ this.uid});
+bool isFirebase = true;
+fecthprofiledetails({ this.uid, this.isFirebase});
 }

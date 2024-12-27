@@ -1,8 +1,9 @@
+import 'package:demo_chat/Model/instaPostmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:story_view/story_view.dart';
 
-class storyview extends StatelessWidget {
+/*class storyview extends StatelessWidget {
   // final StoryController controller = StoryController();
 
   @override
@@ -101,16 +102,19 @@ class storyview extends StatelessWidget {
       ),
     );
   }
-}
+}*/
 
 class MoreStories extends StatefulWidget {
+  Datum data1;
+  MoreStories(this.data1);
+
   @override
   _MoreStoriesState createState() => _MoreStoriesState();
 }
 
 class _MoreStoriesState extends State<MoreStories> {
   // final storyController = StoryController();
-
+   Datum storydata;
   @override
   void dispose() {
     // storyController.dispose();
@@ -123,7 +127,7 @@ class _MoreStoriesState extends State<MoreStories> {
     super.initState();
     WidgetsBinding.instance?.addPostFrameCallback((_) {
       SystemChrome.setSystemUIOverlayStyle(
-           SystemUiOverlayStyle(
+           const SystemUiOverlayStyle(
             statusBarColor: Colors.black87,
             statusBarBrightness: Brightness.dark,
             statusBarIconBrightness: Brightness.light,
@@ -132,17 +136,64 @@ class _MoreStoriesState extends State<MoreStories> {
             systemNavigationBarIconBrightness: Brightness.light,
           ));
     });
+    storydata = widget.data1;
   }
 
-
+// StoryController  controller = StoryController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       // appBar: AppBar(
       //   title: Text("More"),
       // ),
-      body: StoryView(
-       [
+      body:StoryView(
+        // controller: controller,
+        [
+          StoryItem.text(
+            "Hello world!\nHave a look at some great Ghanaian delicacies. I'm sorry if your mouth waters. \n\nTap!",
+            Colors.orange,
+            roundedTop: true,
+          ),
+
+          StoryItem.inlineImage(
+            const NetworkImage("https://image.ibb.co/cU4WGx/Omotuo-Groundnut-Soup-braperucci-com-1.jpg"),
+            // controller: controller,
+            caption: const Text(
+              "Omotuo & Nkatekwan; You will love this meal if taken as supper.",
+              style: TextStyle(
+                color: Colors.white,
+                backgroundColor: Colors.black54,
+                fontSize: 17,
+              ),
+            ),
+          ),
+          StoryItem.inlineImage(
+            const NetworkImage(
+                "https://media.giphy.com/media/5GoVLqeAOo6PK/giphy.gif"),
+            // controller: controller,
+            caption: const Text(
+              "Hektas, sektas and skatad",
+              style: TextStyle(
+                color: Colors.white,
+                backgroundColor: Colors.black54,
+                fontSize: 17,
+              ),
+            ),
+          )
+        ],
+        onStoryShow: (s) {
+          print("Showing a story");
+        },
+        onComplete: () {
+          print("Completed a cycle");
+        },
+        progressPosition: ProgressPosition.bottom,
+        repeat: false,
+        inline: true,
+      ), /*StoryView(
+        controller:controller,
+      storyItems:List.generate(1, (index) => StoryItem.pageImage(controller: controller, url: storydata.image)),
+       *//*[
           StoryItem.text(
             "I guess you'd love to see more of our food. That's great.",
             Colors.blue,
@@ -174,7 +225,16 @@ class _MoreStoriesState extends State<MoreStories> {
             caption: "Hello, from the other side2",
             // controller: storyController,
           ),
-        ],
+          StoryItem.pageGif(
+            "https://media.giphy.com/media/XcA8krYsrEAYXKf4UQ/giphy.gif",
+            controller: controller,
+            shown:true,
+            imageFit: BoxFit.contain,
+            // NetworkImage("https://media.giphy.com/media/XcA8krYsrEAYXKf4UQ/giphy.gif"),
+            caption: "Hello, from the other side2",
+            // controller: storyController,
+          ),
+        ]*//*
         onStoryShow: (s) {
           print("Showing a story");
         },
@@ -185,7 +245,7 @@ class _MoreStoriesState extends State<MoreStories> {
         progressPosition: ProgressPosition.top,
         repeat: false,
         // controller: storyController,
-      ),
+      ),*/
     );
   }
 }

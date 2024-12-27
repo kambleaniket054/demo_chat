@@ -9,13 +9,13 @@ ProfileDetailModel profileDetailModelFromJson(String str) => ProfileDetailModel.
 String profileDetailModelToJson(ProfileDetailModel data) => json.encode(data.toJson());
 
 class ProfileDetailModel {
-  List<String> chats;
-  DateTime creationdate;
-  String email;
-  int followers;
-  int following;
-  String photourl;
-  String username;
+  List<String> chats =[];
+  DateTime creationdate = DateTime.now();
+  String email = "";
+  var followers ;
+ var following ;
+  String photourl = "";
+  String username = " ";
 
   ProfileDetailModel({
      this.chats,
@@ -33,13 +33,13 @@ class ProfileDetailModel {
     email: json["email"],
     followers: json["followers"],
     following: json["following"],
-    photourl: json["photourl"],
+    photourl: json["photourl"] ?? "",
     username: json["username"],
   );
 
   Map<String, dynamic> toJson() => {
     "chats": List<dynamic>.from(chats.map((x) => x)),
-    "creationdate": creationdate.toIso8601String(),
+    "creationdate": creationdate?.toIso8601String(),
     "email": email,
     "followers": followers,
     "following": following,

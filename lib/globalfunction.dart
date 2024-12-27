@@ -1,19 +1,17 @@
 import 'dart:async';
 
-import 'package:demo_chat/Model/instaPostmodel.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:image_picker/image_picker.dart';
-import 'edit_photo/widget/dragable_widget.dart';
-import 'package:firebase_storage/firebase_storage.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
-import 'package:firebase_auth/firebase_auth.dart';
+import 'edit_photo/widget/dragable_widget.dart';
  GlobalKey<NavigatorState> mainnavigationkey;
  GlobalKey<NavigatorState> navigationkeys;
 GoogleSignInAccount userdata;
- User usredetails;
+ User  Usersprofile;
   PickedFile pickedFile;
 
 StreamController<bool> datacontroller = StreamController<bool>.broadcast();
@@ -28,6 +26,10 @@ pushScreenname(BuildContext context, var data){
   Navigator.push(context, MaterialPageRoute(builder: (context)=>data));
 }
 
-createTextThemeWise(String value, TextStyle style){
+createTextThemeWise(String value, {TextStyle style}){
   return Text(value, style: style,textAlign: TextAlign.center,softWrap: true,);
+}
+
+void getuserloginIn() async {
+  Usersprofile = FirebaseAuth.instance.currentUser as User;
 }

@@ -18,7 +18,7 @@ class detailpagestate extends State<detailpage>{
         automaticallyImplyLeading: false,
         title: Text("Details",style: TextStyle(
           color: Colors.black,
-          fontSize: 24,
+          fontSize: 14,
           fontWeight: FontWeight.w500,
         ),),
       ),

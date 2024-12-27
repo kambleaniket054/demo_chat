@@ -4,7 +4,7 @@
 
 import 'dart:convert';
 
-import 'package:demo_chat/Model/commentModel.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 InstaPostmodel instaPostmodelFromJson(String str) => InstaPostmodel.fromJson(json.decode(str));
 
@@ -39,8 +39,6 @@ class InstaPostmodel {
 }
 
 class Datum {
-
-
   Datum({
      this.id,
      this.image,
@@ -50,25 +48,32 @@ class Datum {
      this.publishDate,
      this.owner,
     this.commentlist,
+     this.isfirebase,
+    this.postid = "",
+    this.Ads,
   });
 
-  String id;
-  String image;
-  int likes;
-  List<String> tags;
-  String text;
+  String id="";
+  String image="";
+  var likes= "0";
+  String postid = "";
+  List tags;
+  String text="";
   DateTime publishDate;
-  Owner owner;
+  Owner owner = Owner();
   var commentlist;
+  bool isfirebase = false;
+  var Ads;
 
   factory Datum.fromJson(Map<String, dynamic> json) => Datum(
     id: json["id"],
     image: json["image"]!=null ? json["image"] :"" ,
-    likes: json["likes"]!=null ?json["likes"]:0,
+    likes: json["likes"]!=null ?json["likes"].toString():"0",
     tags: json["tags"] !=null ?List<String>.from(json["tags"].map((x) => x)):[],
     text: json["text"],
-    publishDate: DateTime.parse(json["publishDate"]),
-    owner: Owner.fromJson(json["owner"]),
+    publishDate:json["publishDate"].runtimeType == Timestamp ?json["publishDate"].toDate() : DateTime.parse(json["publishDate"].toString()),
+    owner: json["owner"] == null ? Owner(): Owner.fromJson(json["owner"]),
+      isfirebase:false,
   );
 
   Map<String, dynamic> toJson() => {
@@ -91,18 +96,18 @@ class Owner {
      this.picture,
   });
 
-  String id;
+  String id = "";
   Title title;
-  String firstName;
-  String lastName;
-  String picture;
+  String firstName = "";
+  String lastName = "";
+  String picture = "";
 
   factory Owner.fromJson(Map<String, dynamic> json) => Owner(
-    id: json["id"],
+    id: json["id"]??"",
     title: titleValues.map[json["title"]],
-    firstName: json["firstName"],
-    lastName: json["lastName"],
-    picture: json["picture"],
+    firstName: json["firstName"] ?? "",
+    lastName: json["lastName"] ?? "",
+    picture: json["picture"]??"",
   );
 
   Map<String, dynamic> toJson() => {

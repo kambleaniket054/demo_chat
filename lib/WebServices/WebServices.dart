@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:http/http.dart' as http;
 
@@ -17,13 +16,13 @@ print(url);
   if(header == null){
     response = await http.get(uri,headers: requestHeaders);
   }else{
-    response = await http.get(uri, headers: requestHeaders);
+    response = await http.get(uri);
   }
 
   if (response.statusCode != 200) {
     return null;
   }
-   print(response.body);
+   // print(response.body);
   var toJsonData = json.decode(response.body);
   // getdata();
   return toJsonData;
